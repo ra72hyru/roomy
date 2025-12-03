@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/LoginPage.css';
 
 interface LoginPageProps {
     onLogin: (isAdmin: boolean) => void
@@ -6,10 +7,13 @@ interface LoginPageProps {
 
 const LoginPage = ({ onLogin }: LoginPageProps) => {
   return (
-    <div>
-        <input placeholder='Username' />
-        <input placeholder='Password' />
-        <button onClick={() => onLogin(true)}>Login</button>
+    <div className='login-page-container'>
+        <div className='login-page'>
+            <h1>Login</h1>
+            <input placeholder='Username' />
+            <input placeholder='Password' />
+            <button onClick={() => onLogin(true)}>Login</button>
+        </div>
     </div>
   )
 }

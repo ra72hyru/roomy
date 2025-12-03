@@ -7,7 +7,7 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
 
   return (
-    <div>
+    <div className='app'>
       {isAdmin 
               ? <Dashboard />
               : <LoginPage onLogin={setIsAdmin} />
