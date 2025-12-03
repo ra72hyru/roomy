@@ -5,6 +5,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: var(--background-color);
 }
 
 .login-page {
@@ -16,13 +17,13 @@
     flex-direction: column;
     justify-content: center;
     align-items: stretch;
-    row-gap: 8px;
+    row-gap: 16px;
 
     width: 50%;
     height: 50%;
 
     background-color: var(--background-color-lvl2);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 input, button {
