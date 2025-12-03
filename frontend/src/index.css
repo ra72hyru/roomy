@@ -3,6 +3,7 @@
 :root {
   --background-color: hsl(0, 0%, 90%);
   --background-color-lvl2: hsl(0, 0%, 95%);
+  --background-color-lvl3: hsl(0, 0%, 100%);
   --white-contrast: hsl(0, 0%, 75%);
 }
 
