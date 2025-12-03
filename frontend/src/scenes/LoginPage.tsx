@@ -1,8 +1,16 @@
 import React from 'react';
 
-const LoginPage = () => {
+interface LoginPageProps {
+    onLogin: (isAdmin: boolean) => void
+}
+
+const LoginPage = ({ onLogin }: LoginPageProps) => {
   return (
-    <div>LoginPage</div>
+    <div>
+        <input placeholder='Username' />
+        <input placeholder='Password' />
+        <button onClick={() => onLogin(true)}>Login</button>
+    </div>
   )
 }
 
