@@ -7,6 +7,7 @@ const Users = () => {
     const [users, setUsers] = useState<{id: number, firstName: string, lastName: string, email: string, isAdmin: boolean}[]>([]);
     const [isAddUserFormOpen, setIsAddUserFormOpen] = useState(false);
     const [id, setId] = useState<number>(0);
+    const [editUser, setEditUser] = useState<number | null>(null);
 
     const handleAddUser = (firstName: string, lastName: string, email: string, isAdmin: boolean) => {
         setUsers([...users, {id: id, firstName, lastName, email, isAdmin}]); 
@@ -14,6 +15,10 @@ const Users = () => {
         setIsAddUserFormOpen(false);
     };
 
+    const handleEditUser = (firstName: string, lastName: string, email: string, isAdmin: boolean) => {
+        setUsers(users.map((user, index) => index === editUser ? {...user, firstName, lastName, email, isAdmin} : user ));
+        setEditUser(null);
+    };
 
     return (
         <div className='users-container'>
@@ -22,11 +27,15 @@ const Users = () => {
             </div>
             <div className='users-rows'>
                 {users.map((user, index) => (
-                    <User key={index} id={user.id} firstName={user.firstName} lastName={user.lastName} 
-                            email={user.email} isAdmin={user.isAdmin} />
+                    editUser !== user.id ?
+                        <User key={index} id={user.id} firstName={user.firstName} lastName={user.lastName} 
+                                email={user.email} isAdmin={user.isAdmin} onEdit={setEditUser}/>
+                            :
+                        <UserForm key={index} onSave={handleEditUser} onCancel={() => setEditUser(null)} 
+                                    currentData={{firstName: user.firstName, lastName: user.lastName, email: user.email, isAdmin: user.isAdmin}}/>
                 ))}
                 {!isAddUserFormOpen && <button onClick={() => setIsAddUserFormOpen(true)}>Add User</button>}
-                {isAddUserFormOpen && (<UserForm addUser={handleAddUser} />)}
+                {isAddUserFormOpen && (<UserForm onSave={handleAddUser} onCancel={setIsAddUserFormOpen} />)}
             </div>
         </div>
     )

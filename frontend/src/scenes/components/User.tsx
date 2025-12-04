@@ -7,18 +7,18 @@ interface UserProps {
     lastName: string;
     email: string;
     isAdmin: boolean;
+    onEdit: (id: number) => void;
 }
 
-const User = ({ id, firstName, lastName, email, isAdmin }: UserProps) => {
-    const [isBeingEdited, setIsBeingEdited] = useState<boolean>(false);
+const User = ({ id, firstName, lastName, email, isAdmin, onEdit }: UserProps) => {
 
     return (
         <div className='user'>
-            {isBeingEdited ? <input /> : <p>{firstName}</p>}
-            {isBeingEdited ? <input /> : <p>{lastName}</p>}
-            {isBeingEdited ? <input /> : <p>{email}</p>}
-            {isBeingEdited ? <input /> : <p>{isAdmin ? 'Admin' : 'User'}</p>}
-            {!isBeingEdited && <button onClick={() => setIsBeingEdited(true)}>Edit</button>}
+            <p className='user-info'>{firstName}</p>
+            <p className='user-info'>{lastName}</p>
+            <p className='user-info'>{email}</p>
+            <p className='user-info'>{isAdmin ? 'Admin' : 'User'}</p>
+            <button onClick={() => onEdit(id)}>Edit</button>
         </div>
     )
 };
