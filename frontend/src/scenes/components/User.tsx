@@ -8,9 +8,10 @@ interface UserProps {
     email: string;
     isAdmin: boolean;
     onEdit: (id: number) => void;
+    onDelete: (id: number) => void;
 }
 
-const User = ({ id, firstName, lastName, email, isAdmin, onEdit }: UserProps) => {
+const User = ({ id, firstName, lastName, email, isAdmin, onEdit, onDelete }: UserProps) => {
 
     return (
         <div className='user'>
@@ -19,6 +20,7 @@ const User = ({ id, firstName, lastName, email, isAdmin, onEdit }: UserProps) =>
             <p className='user-info'>{email}</p>
             <p className='user-info'>{isAdmin ? 'Admin' : 'User'}</p>
             <button onClick={() => onEdit(id)}>Edit</button>
+            <button onClick={() => onDelete(id)}>Delete</button>
         </div>
     )
 };

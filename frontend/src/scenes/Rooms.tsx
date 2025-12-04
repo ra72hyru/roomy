@@ -18,7 +18,7 @@ const Rooms = () => {
 
     const handleEditRoom = (roomName: string, capacity: number | '', location?: string) => {
         setRooms(rooms.map((room, index) => 
-            index === editRoom ? {...room, roomName: roomName, capacity: capacity, location: location} : room
+            room.id === editRoom ? {...room, roomName: roomName, capacity: capacity, location: location} : room
         ));
         setEditRoom(null);
     };

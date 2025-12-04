@@ -16,9 +16,13 @@ const Users = () => {
     };
 
     const handleEditUser = (firstName: string, lastName: string, email: string, isAdmin: boolean) => {
-        setUsers(users.map((user, index) => index === editUser ? {...user, firstName, lastName, email, isAdmin} : user ));
+        setUsers(users.map((user, index) => user.id === editUser ? {...user, firstName, lastName, email, isAdmin} : user ));
         setEditUser(null);
     };
+
+    const handleDeleteUser = (id: number) => {
+        setUsers(users.filter(user => user.id !== id));
+    }
 
     return (
         <div className='users-container'>
@@ -29,7 +33,7 @@ const Users = () => {
                 {users.map((user, index) => (
                     editUser !== user.id ?
                         <User key={index} id={user.id} firstName={user.firstName} lastName={user.lastName} 
-                                email={user.email} isAdmin={user.isAdmin} onEdit={setEditUser}/>
+                                email={user.email} isAdmin={user.isAdmin} onEdit={setEditUser} onDelete={handleDeleteUser} />
                             :
                         <UserForm key={index} onSave={handleEditUser} onCancel={() => setEditUser(null)} 
                                     currentData={{firstName: user.firstName, lastName: user.lastName, email: user.email, isAdmin: user.isAdmin}}/>
