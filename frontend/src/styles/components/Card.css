@@ -12,6 +12,8 @@
     flex-direction: column;
     justify-content: space-around;
     align-items: flex-start;
+
+    position: relative;
 }
 
 p {
@@ -21,4 +23,11 @@ p {
 span {
     font-weight: bold;
     font-size: 1.4rem;
+}
+
+#edit-card-button {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    cursor: pointer;
 }

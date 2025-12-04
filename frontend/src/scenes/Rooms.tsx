@@ -6,8 +6,9 @@ import '../styles/Rooms.css';
 
 const Rooms = () => {
     const [rooms, setRooms] = useState<{id: number, roomName: string, capacity: number | '', status?: string, bookings?: number, location?: string}[]>([]);
-    const [isRoomFormOpen, setIsRoomFormOpen] = useState<boolean>(true);
+    const [isRoomFormOpen, setIsRoomFormOpen] = useState<boolean>(false);
     const [idCounter, setIdCounter] = useState<number>(0);
+    const [editRoom, setEditRoom] = useState<number | null>(null);
 
     const handleSaveRoom = (roomName: string, capacity: number | '', location?: string) => {
         setIsRoomFormOpen(false);
@@ -15,8 +16,11 @@ const Rooms = () => {
         setIdCounter(prev => prev + 1);
     }
 
-    const handleEditRoom = () => {
-        setIsRoomFormOpen(true);
+    const handleEditRoom = (roomName: string, capacity: number | '', location?: string) => {
+        setRooms(rooms.map((room, index) => 
+            index === editRoom ? {...room, roomName: roomName, capacity: capacity, location: location} : room
+        ));
+        setEditRoom(null);
     };
 
     return (
@@ -27,9 +31,15 @@ const Rooms = () => {
             </div>
             <div className='rooms-cards'>
                 {rooms.map((room, index) => (
+                    index !== editRoom ?
                     <Card key={index} id={room.id} roomName={room.roomName} capacity={room.capacity} 
                             status={room.status} bookings={room.bookings} location={room.location}
-                            onEdit={handleEditRoom} />
+                            onEdit={setEditRoom} />
+                            :
+                    <RoomForm key={index} currentData={{roomName: room.roomName, capacity: room.capacity, location: room.location}}
+                        onSave={handleEditRoom}
+                        onCancel={() => setEditRoom(null)}
+                    />
                 ))}
                 {!isRoomFormOpen && <AddRoomButton addRoom={setIsRoomFormOpen} />}
                 {isRoomFormOpen && <RoomForm onCancel={setIsRoomFormOpen} onSave={handleSaveRoom} />}
