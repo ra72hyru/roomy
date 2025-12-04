@@ -13,6 +13,10 @@ const Rooms = () => {
             <div className='rooms-cards'>
                 <Card />
                 <Card />
+                <Card />
+                <Card />
+                <Card />
+                <Card />
                 {/* <Card />
                 <Card />
                 <Card />

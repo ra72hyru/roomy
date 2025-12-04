@@ -9,21 +9,23 @@
     flex: 0 0 128px;
     width: auto;
     border: solid 1px red;
-    padding: 16px 32px;
+    padding: 16px 64px;
 
     background-color: var(--background-color);
 }
 
 .rooms-cards {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    align-content: flex-start;
     flex-wrap: wrap;
     gap: 48px;
     flex-grow: 1;
 
     border: solid 1px green;
     overflow: auto;
-    padding: 32px;
+    padding: 64px;
+
     scrollbar-width: none; /* Firefox */
 
     background-color: var(--background-color);
