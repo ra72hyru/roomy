@@ -1,3 +1,7 @@
 .sidebar {
-    
+    width: 256px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: 256px;
+    min-width: 256px;
 }
