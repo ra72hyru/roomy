@@ -5,6 +5,11 @@
   --background-color-lvl2: hsl(0, 0%, 95%);
   --background-color-lvl3: hsl(0, 0%, 100%);
   --white-contrast: hsl(0, 0%, 75%);
+  --foreground-color: hsl(0, 0%, 0%);
+  --foreground-color-lvl2: hsl(0, 0%, 5%);
+  --foreground-color-lvl3: hsl(0, 0%, 10%);
+  --text: hsl(0, 0%, 0%);
+  --text-contrast: hsl(0, 0%, 100%);
 }
 
 * {
