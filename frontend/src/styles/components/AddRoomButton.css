@@ -1,0 +1,14 @@
+.add-room-button {
+    width: 250px;
+    height: 200px;
+    padding: 16px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#add-icon {
+    cursor: pointer;
+}

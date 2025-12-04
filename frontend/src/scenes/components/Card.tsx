@@ -2,18 +2,18 @@ import React from 'react';
 import '../../styles/components/Card.css';
 
 interface CardProps {
-    roomName?: string;
+    roomName: string;
+    capacity: number | '';
     status?: string;
-    capacity?: number;
     bookings?: number;
 }
 
-const Card = ({ roomName, status, capacity, bookings }: CardProps) => {
+const Card = ({ roomName, status = 'Available', capacity, bookings = 0 }: CardProps) => {
     return (
         <div className='card'>
             <h2>{roomName}</h2>
-            <h3>Status: {status}</h3>
-            <h3>Capacity: {bookings}/{capacity}</h3>
+            <p>Status: <span>{status}</span></p>
+            <p>Capacity: <span>{bookings} / {capacity}</span></p>
         </div>
     )
 };

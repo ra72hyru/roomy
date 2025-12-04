@@ -2,13 +2,21 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-left: solid 1px var(--white-contrast);
 }
 
 .rooms-header {
     height: 128px;
+    display: flex;
     flex: 0 0 128px;
-    width: auto;
-    border: solid 1px red;
+    justify-content: space-around;
+    align-items: center;
+    
+
+    border-bottom: solid 1px var(--white-contrast);
+
     padding: 16px 64px;
 
     background-color: var(--background-color);
@@ -22,7 +30,6 @@
     gap: 48px;
     flex-grow: 1;
 
-    border: solid 1px green;
     overflow: auto;
     padding: 64px;
 
@@ -33,4 +40,9 @@
 
 .header-content {
     font-size: 3.5rem;
+}
+
+#header-add-room {
+    text-decoration: underline;
+    cursor: pointer;
 }
