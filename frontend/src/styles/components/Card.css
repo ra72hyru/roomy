@@ -28,6 +28,13 @@ span {
 #edit-card-button {
     position: absolute;
     right: 4px;
+    bottom: 4px;
+    cursor: pointer;
+}
+
+#delete-card-button {
+    position: absolute;
+    right: 4px;
     top: 4px;
     cursor: pointer;
 }

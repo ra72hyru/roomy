@@ -23,6 +23,10 @@ const Rooms = () => {
         setEditRoom(null);
     };
 
+    const handleDeleteRoom = (id: number) => {
+        setRooms(rooms.filter(room => room.id !== id));
+    }
+
     return (
         <div className='rooms-container'>
             <div className='rooms-header'>
@@ -31,10 +35,10 @@ const Rooms = () => {
             </div>
             <div className='rooms-cards'>
                 {rooms.map((room, index) => (
-                    index !== editRoom ?
+                    room.id !== editRoom ?
                     <Card key={index} id={room.id} roomName={room.roomName} capacity={room.capacity} 
                             status={room.status} bookings={room.bookings} location={room.location}
-                            onEdit={setEditRoom} />
+                            onEdit={setEditRoom} onDelete={() => handleDeleteRoom(room.id)}/>
                             :
                     <RoomForm key={index} currentData={{roomName: room.roomName, capacity: room.capacity, location: room.location}}
                         onSave={handleEditRoom}
