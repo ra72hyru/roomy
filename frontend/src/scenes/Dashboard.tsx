@@ -8,6 +8,7 @@ const Dashboard = () => {
       <div>
         Dashboard
         <button onClick={() => navigate('/rooms')}>Rooms</button>
+        <button onClick={() => navigate('/users')}>Users</button>
       </div>
     )
 };
