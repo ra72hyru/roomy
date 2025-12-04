@@ -5,13 +5,13 @@ import AddRoomButton from './components/AddRoomButton';
 import '../styles/Rooms.css';
 
 const Rooms = () => {
-    const [rooms, setRooms] = useState<{roomName: string, capacity: number | '', status?: string, bookings?: number}[]>([]);
+    const [rooms, setRooms] = useState<{roomName: string, capacity: number | '', status?: string, bookings?: number, location?: string}[]>([]);
 //TODO: highlight button on top for highlighting full or available rooms
-    const [isRoomFormOpen, setIsRoomFormOpen] = useState(true);
+    const [isRoomFormOpen, setIsRoomFormOpen] = useState<boolean>(true);
 
-    const handleSaveRoom = (roomName: string, capacity: number | '') => {
+    const handleSaveRoom = (roomName: string, capacity: number | '', location?: string) => {
         setIsRoomFormOpen(false);
-        setRooms([...rooms, {roomName: roomName, capacity: capacity}]);
+        setRooms([...rooms, {roomName: roomName, capacity: capacity, location: location}]);
     }
 
     return (
@@ -22,7 +22,8 @@ const Rooms = () => {
             </div>
             <div className='rooms-cards'>
                 {rooms.map((room, index) => (
-                    <Card key={index} roomName={room.roomName} capacity={room.capacity} status={room.status} bookings={room.bookings} />
+                    <Card key={index} roomName={room.roomName} capacity={room.capacity} 
+                            status={room.status} bookings={room.bookings} location={room.location} />
                 ))}
                 {!isRoomFormOpen && <AddRoomButton addRoom={setIsRoomFormOpen} />}
                 {isRoomFormOpen && <RoomForm onCancel={setIsRoomFormOpen} onSave={handleSaveRoom} />}
