@@ -5,14 +5,19 @@ import AddRoomButton from './components/AddRoomButton';
 import '../styles/Rooms.css';
 
 const Rooms = () => {
-    const [rooms, setRooms] = useState<{roomName: string, capacity: number | '', status?: string, bookings?: number, location?: string}[]>([]);
-//TODO: highlight button on top for highlighting full or available rooms
+    const [rooms, setRooms] = useState<{id: number, roomName: string, capacity: number | '', status?: string, bookings?: number, location?: string}[]>([]);
     const [isRoomFormOpen, setIsRoomFormOpen] = useState<boolean>(true);
+    const [idCounter, setIdCounter] = useState<number>(0);
 
     const handleSaveRoom = (roomName: string, capacity: number | '', location?: string) => {
         setIsRoomFormOpen(false);
-        setRooms([...rooms, {roomName: roomName, capacity: capacity, location: location}]);
+        setRooms([...rooms, {id: idCounter, roomName: roomName, capacity: capacity, location: location}]);
+        setIdCounter(prev => prev + 1);
     }
+
+    const handleEditRoom = () => {
+        setIsRoomFormOpen(true);
+    };
 
     return (
         <div className='rooms-container'>
@@ -22,68 +27,12 @@ const Rooms = () => {
             </div>
             <div className='rooms-cards'>
                 {rooms.map((room, index) => (
-                    <Card key={index} roomName={room.roomName} capacity={room.capacity} 
-                            status={room.status} bookings={room.bookings} location={room.location} />
+                    <Card key={index} id={room.id} roomName={room.roomName} capacity={room.capacity} 
+                            status={room.status} bookings={room.bookings} location={room.location}
+                            onEdit={handleEditRoom} />
                 ))}
                 {!isRoomFormOpen && <AddRoomButton addRoom={setIsRoomFormOpen} />}
                 {isRoomFormOpen && <RoomForm onCancel={setIsRoomFormOpen} onSave={handleSaveRoom} />}
-                {/* <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card /> */}
             </div>
         </div>
     )

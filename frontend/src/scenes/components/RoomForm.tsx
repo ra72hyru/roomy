@@ -4,12 +4,13 @@ import '../../styles/components/RoomForm.css';
 interface RoomFormProps {
     onCancel: (isRoomFormOpen: boolean) => void;
     onSave: (roomName: string, capacity: number | '', location?: string) => void;
+    currentData?: {roomName?: string, capacity?: number | '', location?: string};
 }
 
-const RoomForm = ({ onCancel, onSave }: RoomFormProps) => {
-    const [roomName, setRoomName] = useState<string>('');
-    const [capacity, setCapacity] = useState<number | ''>('');
-    const [location, setLocation] = useState<string>('');
+const RoomForm = ({ onCancel, onSave, currentData }: RoomFormProps) => {
+    const [roomName, setRoomName] = useState<string>(currentData?.roomName || '');
+    const [capacity, setCapacity] = useState<number | ''>(currentData?.capacity || '');
+    const [location, setLocation] = useState<string>(currentData?.location || '');
 
     return (
         <div className='room-form'>
