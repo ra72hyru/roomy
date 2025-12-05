@@ -8,6 +8,18 @@ const app = express();
 app.use(express.json());
 app.use(cors({methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']}));
 
+//get all the users
+app.get('/users', (req, res) => {
+    const sql: string = `
+        SELECT *
+        FROM users
+    `;
+
+    const users = db.prepare(sql).all();
+
+    res.status(200).json({users: users});
+});
+
 //handle login from the login page
 app.post('/login', (req, res) => {
     const sql: string = `
@@ -77,9 +89,9 @@ app.delete('/delete-user', (req, res) => {
     const result = db.prepare(sql).run(id);
 
     if (result.changes > 0) 
-        res.status(200).send({message: 'User deleted'});
+        res.status(200).json({message: 'User deleted'});
     else
-        res.status(404).send({message: 'User not found'});
+        res.status(404).json({message: 'User not found'});
 });
 
 app.listen(PORT, () => {

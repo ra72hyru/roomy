@@ -1,27 +1,47 @@
-import React, { use, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/Users.css';
 import User from './components/User';
 import UserForm from './components/UserForm';
 
 const Users = () => {
     //const [users, setUsers] = useState<{id: number, firstName: string, lastName: string, email: string, isAdmin: boolean}[]>([]);
-    const [users, setUsers] = useState<{id: number, firstName: string, lastName: string, email?: string, isAdmin: boolean}[]>([]);
+    const [users, setUsers] = useState<{id: number, first_name: string, last_name: string, email?: string, is_admin: boolean}[]>([]);
     const [isAddUserFormOpen, setIsAddUserFormOpen] = useState(false);
     const [editUser, setEditUser] = useState<number | null>(null);
     
-    const handleAddUser = async (firstName: string, lastName: string, email: string, isAdmin: boolean): Promise<void> => {
+    const getUsers = async (): Promise<void> => {
+        try {
+            const response = await fetch('http://localhost:8000/users');
+
+            if (!response.ok)
+                throw new Error();
+            else {
+                const retData = await response.json();
+                console.log(retData.users);
+                setUsers(retData.users);
+            }
+        } catch (err) {
+            console.log((err as Error).message);
+        }
+    }
+
+    useEffect(() => {
+        getUsers();
+    }, []);
+
+    const handleAddUser = async (first_name: string, last_name: string, email: string, is_admin: boolean): Promise<void> => {
         try {
             const response = await fetch('http://localhost:8000/add-user', {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({first_name: firstName, last_name: lastName, email: email, is_admin: isAdmin, username: firstName, password: lastName})
+                body: JSON.stringify({first_name: first_name, last_name: last_name, email: email, is_admin: is_admin, username: first_name, password: last_name})
             });
 
             if (!response.ok)
                 throw new Error();
             else {
                 const retData = await response.json();
-                setUsers([...users, {id: retData.id, firstName: firstName, lastName: lastName, email: email, isAdmin: isAdmin}]);
+                setUsers([...users, {id: retData.id, first_name: first_name, last_name: last_name, email: email, is_admin: is_admin}]);
                 setIsAddUserFormOpen(false);
             }
         } catch (err) {
@@ -29,23 +49,23 @@ const Users = () => {
         }
     };
 
-    const handleEditUser = async (firstName: string, lastName: string, email: string, isAdmin: boolean) => {
+    const handleEditUser = async (first_name: string, last_name: string, email: string, is_admin: boolean) => {
         try {
             const response = await fetch('http://localhost:8000/edit-user', {
                 method: "PUT",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({id: editUser, first_name: firstName, last_name: lastName, email: email, is_admin: isAdmin})
+                body: JSON.stringify({id: editUser, first_name: first_name, last_name: last_name, email: email, is_admin: is_admin})
             });
 
             const retData = await response.json();
             if (!response.ok)
                 throw new Error(retData.message);
             else {
-                setUsers(users.map((user) => user.id === editUser ? {...user, firstName, lastName, email, isAdmin} : user ));
+                setUsers(users.map((user) => user.id === editUser ? {...user, first_name, last_name, email, is_admin} : user ));
                 setEditUser(null);
             }
         } catch (err) {
-            console.log({id: editUser, first_name: firstName, last_name: lastName, email: email, is_admin: isAdmin});
+            console.log({id: editUser, first_name: first_name, last_name: last_name, email: email, is_admin: is_admin});
             console.log((err as Error).message);
         }
     };
@@ -78,11 +98,11 @@ const Users = () => {
             <div className='users-rows'>
                 {users.map((user, index) => (
                     editUser !== user.id ?
-                        <User key={index} id={user.id} firstName={user.firstName} lastName={user.lastName} 
-                                email={user.email} isAdmin={user.isAdmin} onEdit={setEditUser} onDelete={handleDeleteUser} />
+                        <User key={index} id={user.id} first_name={user.first_name} last_name={user.last_name} 
+                                email={user.email} is_admin={user.is_admin} onEdit={setEditUser} onDelete={handleDeleteUser} />
                             :
                         <UserForm key={index} onSave={handleEditUser} onCancel={() => setEditUser(null)} 
-                                    currentData={{firstName: user.firstName, lastName: user.lastName, email: user.email, isAdmin: user.isAdmin}}/> 
+                                    currentData={{first_name: user.first_name, last_name: user.last_name, email: user.email, is_admin: user.is_admin}}/> 
                 ))}
                 {!isAddUserFormOpen && <button onClick={() => setIsAddUserFormOpen(true)}>Add User</button>}
                 {isAddUserFormOpen && (<UserForm onSave={handleAddUser} onCancel={setIsAddUserFormOpen} />)}

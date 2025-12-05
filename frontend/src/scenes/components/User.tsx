@@ -3,22 +3,22 @@ import '../../styles/components/User.css';
 
 interface UserProps {
     id: number;
-    firstName: string;
-    lastName: string;
+    first_name: string;
+    last_name: string;
     email?: string;
-    isAdmin: boolean;
+    is_admin: boolean;
     onEdit: (id: number) => void;
     onDelete: (id: number) => void;
 }
 
-const User = ({ id, firstName, lastName, email, isAdmin, onEdit, onDelete }: UserProps) => {
+const User = ({ id, first_name, last_name, email, is_admin, onEdit, onDelete }: UserProps) => {
 
     return (
         <div className='user'>
-            <p className='user-info'>{firstName}</p>
-            <p className='user-info'>{lastName}</p>
+            <p className='user-info'>{first_name}</p>
+            <p className='user-info'>{last_name}</p>
             <p className='user-info'>{email}</p>
-            <p className='user-info'>{isAdmin ? 'Admin' : 'User'}</p>
+            <p className='user-info'>{is_admin ? 'Admin' : 'User'}</p>
             <button onClick={() => onEdit(id)}>Edit</button>
             <button onClick={() => onDelete(id)}>Delete</button>
         </div>
