@@ -6,7 +6,7 @@ const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 8000;
 const app = express();
 
 app.use(express.json());
-app.use(cors({methods: ['GET', 'POST', 'PUT', 'DELETE']}));
+app.use(cors({methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']}));
 
 //handle login from the login page
 app.post('/login', (req, res) => {
@@ -27,6 +27,7 @@ app.post('/login', (req, res) => {
     }
 });
 
+//handle adding a user, sends back the id of the created user upon success
 app.post('/add-user', (req, res) => {
     const sql: string = `
         INSERT INTO users (first_name, last_name, email, is_admin, username, password)
@@ -37,10 +38,31 @@ app.post('/add-user', (req, res) => {
 
     const result = db.prepare(sql).run([first_name, last_name, email, Number(is_admin), username, password]);
     if (result.changes > 0) {
-        console.log('Added user');
-        res.status(201).json({message: 'User added successfully'});
+        const id: number = Number(result.lastInsertRowid);
+        console.log(`Added user with id ${id}`);
+
+        res.status(201).json({message: 'User added successfully', id: id});
     } else {
         res.status(500).json({message: 'Failed to add user'});
+    }
+});
+
+//handle editing a user
+app.put('/edit-user', (req, res) => {
+    const { id, first_name, last_name, email, is_admin } = req.body;
+    //TODO: check if variables exist
+
+    const sql: string = `
+        UPDATE users 
+        SET first_name = ?, last_name = ?, email = ?, is_admin = ?, username = ?, password = ?
+        WHERE id = ?;
+    `;
+    const result = db.prepare(sql).run([first_name, last_name, email, Number(is_admin), first_name, last_name, id]);
+
+    if (result.changes > 0) {
+        res.status(200).json({message: 'User successfully edited'});
+    } else {
+        res.status(404).json({message: 'User not found'});
     }
 });
 
