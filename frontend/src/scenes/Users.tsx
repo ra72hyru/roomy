@@ -49,10 +49,26 @@ const Users = () => {
             console.log((err as Error).message);
         }
     };
-/*
-    const handleDeleteUser = (id: number) => {
-        setUsers(users.filter(user => user.id !== id));
-    } */
+
+    const handleDeleteUser = async (id: number) => {
+        try {
+            const response = await fetch('http://localhost:8000/delete-user', {
+                method: "DELETE",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({id: id})
+            });
+
+            const retData = await response.json();
+            if (!response.ok)
+                throw new Error(retData.message);
+            else {
+                setUsers(users.filter(user => user.id !== id));
+            }
+        } catch (err) {
+            console.log(id);
+            console.log((err as Error).message);
+        }
+    } 
 
     return (
         <div className='users-container'>
@@ -63,7 +79,7 @@ const Users = () => {
                 {users.map((user, index) => (
                     editUser !== user.id ?
                         <User key={index} id={user.id} firstName={user.firstName} lastName={user.lastName} 
-                                email={user.email} isAdmin={user.isAdmin} onEdit={setEditUser} /* onDelete={handleDeleteUser} */ />
+                                email={user.email} isAdmin={user.isAdmin} onEdit={setEditUser} onDelete={handleDeleteUser} />
                             :
                         <UserForm key={index} onSave={handleEditUser} onCancel={() => setEditUser(null)} 
                                     currentData={{firstName: user.firstName, lastName: user.lastName, email: user.email, isAdmin: user.isAdmin}}/> 

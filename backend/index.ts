@@ -66,6 +66,22 @@ app.put('/edit-user', (req, res) => {
     }
 });
 
+//handle deleting a user
+app.delete('/delete-user', (req, res) => {
+    const {id} = req.body;
+
+    const sql: string = `
+        DELETE FROM users
+        WHERE id = ?;
+    `;
+    const result = db.prepare(sql).run(id);
+
+    if (result.changes > 0) 
+        res.status(200).send({message: 'User deleted'});
+    else
+        res.status(404).send({message: 'User not found'});
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
