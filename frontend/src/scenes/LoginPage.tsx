@@ -13,12 +13,23 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
 
     const navigate = useNavigate();
 
-    const handleLogin = (): void => {
-        if (user === 'admin' && password === 'password') {
-            onLogin(true);
-            navigate('/dashboard');
-        } else {
-            setError('Invalid Username or Password');
+    const handleLogin = async (): Promise<void> => {
+        try {
+            const response = await fetch('http://localhost:8000/login', {
+	            method: "POST",
+                headers: {"Content-Type": "application/json"},
+	            body: JSON.stringify({username: user as string, password: password as string})
+            });
+
+            if (!response.ok) {
+                throw new Error('Invalid Username or Password');
+            } else {
+                const retUser = await response.json();
+                onLogin(retUser.is_admin);
+                navigate('/dashboard');
+            }
+        } catch (err) {
+            setError((err as Error).message);
         }
     }
 

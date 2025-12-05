@@ -1,5 +1,5 @@
 import express from 'express';
-import db, {User} from './database';
+import db, {type User} from './database.ts';
 import cors from 'cors';
 
 const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 8000;
@@ -8,6 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(cors({methods: ['GET', 'POST', 'PUT', 'DELETE']}));
 
+//handle login from the login page
 app.post('/login', (req, res) => {
     const sql: string = `
         SELECT *
@@ -15,8 +16,8 @@ app.post('/login', (req, res) => {
         WHERE username = ? AND password = ?;
     `;
 
-    const username: string = req.query.username as string;
-    const password: string = req.query.password as string;
+    const username: string = req.body.username as string;
+    const password: string = req.body.password as string;
 
     const user: User | unknown = db.prepare(sql).get([username, password]);
     if (user) {
