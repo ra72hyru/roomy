@@ -27,6 +27,23 @@ app.post('/login', (req, res) => {
     }
 });
 
+app.post('/add-user', (req, res) => {
+    const sql: string = `
+        INSERT INTO users (first_name, last_name, email, is_admin, username, password)
+        VALUES (?, ?, ?, ?, ?, ?);
+    `;
+
+    const { first_name, last_name, email, is_admin, username, password } = req.body;
+
+    const result = db.prepare(sql).run([first_name, last_name, email, Number(is_admin), username, password]);
+    if (result.changes > 0) {
+        console.log('Added user');
+        res.status(201).json({message: 'User added successfully'});
+    } else {
+        res.status(500).json({message: 'Failed to add user'});
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
