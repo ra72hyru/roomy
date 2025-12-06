@@ -1,0 +1,44 @@
+.bookings-container { 
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-left: solid 1px var(--white-contrast);
+}
+
+.bookings-header {
+    height: 128px;
+    display: flex;
+    flex: 0 0 128px;
+    justify-content: space-around;
+    align-items: center;
+    
+
+    border-bottom: solid 1px var(--white-contrast);
+
+    padding: 16px 64px;
+
+    background-color: var(--background-color);
+}
+
+.bookings-rows {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 48px;
+    flex-grow: 1;
+
+    overflow: auto;
+    padding: 64px;
+
+    scrollbar-width: none; /* Firefox */
+
+    background-color: var(--background-color);
+}
+
+.header-content {
+    font-size: 3.5rem;
+}

@@ -112,8 +112,10 @@ app.get('/rooms', (req, res) => {
     try {
         const rooms = db.prepare(sql).all();   
         res.status(200).json({rooms: rooms});
+        console.log('Sent all the rooms');
     } catch (err) {
         res.status(500).json({message: (err as Error).message});
+        console.log('Sent no rooms :/');
     }
 });
 

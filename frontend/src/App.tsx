@@ -6,6 +6,7 @@ import Dashboard from './scenes/Dashboard';
 import Rooms from './scenes/Rooms';
 import Sidebar from './scenes/components/Sidebar';
 import Users from './scenes/Users';
+import Bookings from './scenes/Bookings';
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -25,6 +26,7 @@ function App() {
           <Route path='/dashboard' element={isAdmin ? <Dashboard /> : <Navigate to='/login' />} />
           <Route path='/rooms' element={isAdmin ? <Rooms /> : <Navigate to='/login' />} />
           <Route path='/users' element={isAdmin ? <Users /> : <Navigate to='/login' />} />
+          <Route path='/bookings' element={isAdmin ? <Bookings user_id={0} /> : <Navigate to='/login' />} />
           <Route path='/' element={<Navigate to={isLoggedIn ? '/dashboard' : '/login'} />} />
         </Routes>
       </div>

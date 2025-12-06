@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from './components/Card';
 import RoomForm from './components/RoomForm';
 import AddRoomButton from './components/AddRoomButton';
@@ -8,6 +8,26 @@ const Rooms = () => {
     const [rooms, setRooms] = useState<{id: number, room_name: string, capacity: number, status?: string, bookings?: number, location?: string}[]>([]);
     const [isRoomFormOpen, setIsRoomFormOpen] = useState<boolean>(false);
     const [editRoom, setEditRoom] = useState<number | null>(null);
+
+    const getRooms= async (): Promise<void> => {
+            try {
+                const response = await fetch('http://localhost:8000/rooms');
+    
+                if (!response.ok)
+                    throw new Error();
+                else {
+                    const retData = await response.json();
+                    console.log(retData.rooms);
+                    setRooms(retData.rooms);
+                }
+            } catch (err) {
+                console.log((err as Error).message);
+            }
+        }
+    
+    useEffect(() => {
+        getRooms();
+    }, []);
 
     /**
      * Handles saving a new room: sends the data to the backend and upon success it adds the new room to the state.
