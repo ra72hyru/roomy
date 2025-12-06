@@ -56,5 +56,17 @@ if (Number(userCount.count) === 0) {
 
 
 //Create table for bookings
+db.exec(`
+    CREATE TABLE IF NOT EXISTS bookings
+    (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL REFERENCES users(id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+        room_id INTEGER NOT NULL REFERENCES rooms(id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+        start_time TEXT NOT NULL,
+        end_time TEXT NOT NULL
+    ) 
+`);
 
 export default db;

@@ -8,18 +8,6 @@ const app = express();
 app.use(express.json());
 app.use(cors({methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']}));
 
-//get all the users
-app.get('/users', (req, res) => {
-    const sql: string = `
-        SELECT *
-        FROM users
-    `;
-
-    const users = db.prepare(sql).all();
-
-    res.status(200).json({users: users});
-});
-
 //handle login from the login page
 app.post('/login', (req, res) => {
     const sql: string = `
@@ -38,6 +26,24 @@ app.post('/login', (req, res) => {
         res.status(404).json({message: 'User not found'});
     }
 });
+
+//----------------------------------------------------- Users -----------------------------------------------------
+
+//get all the users
+app.get('/users', (req, res) => {
+    const sql: string = `
+        SELECT *
+        FROM users;
+    `;
+
+    try {
+        const users = db.prepare(sql).all();   
+        res.status(200).json({users: users});
+    } catch (err) {
+        res.status(500).json({message: (err as Error).message});
+    }
+});
+
 
 //handle adding a user, sends back the id of the created user upon success
 app.post('/add-user', (req, res) => {
@@ -93,6 +99,179 @@ app.delete('/delete-user', (req, res) => {
     else
         res.status(404).json({message: 'User not found'});
 });
+
+//----------------------------------------------------- Rooms -----------------------------------------------------
+
+//get all the rooms
+app.get('/rooms', (req, res) => {
+    const sql: string = `
+        SELECT *
+        FROM rooms;
+    `;
+
+    try {
+        const rooms = db.prepare(sql).all();   
+        res.status(200).json({rooms: rooms});
+    } catch (err) {
+        res.status(500).json({message: (err as Error).message});
+    }
+});
+
+//handle adding a room, sends back the id of the created room upon success
+app.post('/add-room', (req, res) => {
+    const sql: string = `
+        INSERT INTO rooms (name, capacity, location)
+        VALUES (?, ?, ?, ?);
+    `;
+
+    const { name, capacity, location } = req.body;
+
+    const result = db.prepare(sql).run([name, capacity, location]);
+    if (result.changes > 0) {
+        const id: number = Number(result.lastInsertRowid);
+        console.log(`Added room with id ${id}`);
+
+        res.status(201).json({message: 'Room added successfully', id: id});
+    } else {
+        res.status(500).json({message: 'Failed to add room'});
+    }
+});
+
+//handle editing a room
+app.put('/edit-room', (req, res) => {
+    const { id, name, capacity, location } = req.body;
+    //TODO: check if variables exist
+
+    const sql: string = `
+        UPDATE rooms 
+        SET first_name = ?, last_name = ?, email = ?, is_admin = ?, username = ?, password = ?
+        WHERE id = ?;
+    `;
+    const result = db.prepare(sql).run([name, capacity, location, id]);
+
+    if (result.changes > 0) {
+        res.status(200).json({message: 'Room successfully edited'});
+    } else {
+        res.status(404).json({message: 'Room not found'});
+    }
+});
+
+//handle deleting a room
+app.delete('/delete-room/:id', (req, res) => {
+    const sql: string = `
+        DELETE FROM rooms
+        WHERE id = ?;
+    `;
+    const result = db.prepare(sql).run(req.query.id);
+
+    if (result.changes > 0) 
+        res.status(200).json({message: 'Room deleted'});
+    else
+        res.status(404).json({message: 'Room not found'});
+});
+
+//----------------------------------------------------- Bookings -----------------------------------------------------
+
+//get all bookings
+app.get('/bookings', (req, res) => {
+    const sql: string = `
+        SELECT *
+        FROM bookings;
+    `;
+
+    try {
+        const bookings = db.prepare(sql).all();
+        res.status(200).json(bookings);
+    } catch (err) {
+        res.status(500).json({message: (err as Error).message});
+    }
+});
+
+//get all bookings for a specific user
+app.get('/bookings/:user_id', (req, res) => {
+    const sql: string = `
+        SELECT *
+        FROM bookings
+        WHERE user_id = ?;
+    `;
+
+    try {
+        const bookings = db.prepare(sql).all(req.query.user_id);
+        res.status(200).json(bookings);
+    } catch (err) {
+        res.status(500).json({message: (err as Error).message});
+    }
+});
+
+//get all bookings for a specific room
+app.get('/bookings/:room_id', (req, res) => {
+    const sql: string = `
+        SELECT *
+        FROM bookings
+        WHERE room_id = ?;
+    `;
+
+    try {
+        const bookings = db.prepare(sql).all(req.query.room_id);
+        res.status(200).json(bookings);
+    } catch (err) {
+        res.status(500).json({message: (err as Error).message});
+    }
+});
+
+//add a booking
+app.post('/bookings/add', (req, res) => {
+    const sql: string = `
+        INSERT INTO bookings (user_id, room_id, start_time, end_time)
+        VALUES (?, ?, ?, ?);
+    `;
+
+    const { user_id, room_id, start_time, end_time } = req.body;
+
+    const result = db.prepare(sql).run([user_id, room_id, start_time, end_time]);
+    if (result.changes > 0) {
+        const id: number = Number(result.lastInsertRowid);
+        console.log(`Added booking with id ${id}`);
+
+        res.status(201).json({message: 'Booking added successfully', id: id});
+    } else {
+        res.status(500).json({message: 'Failed to add booking'});
+    }
+});
+
+//edit a booking
+app.patch('/bookings/:id', (req, res) => {
+    const { start_time, end_time } = req.body;
+    //TODO: check if variables exist
+
+    const sql: string = `
+        UPDATE bookings 
+        SET start_time = ?, end_time = ?
+        WHERE id = ?;
+    `;
+    const result = db.prepare(sql).run([start_time, end_time, req.query.id]);
+
+    if (result.changes > 0) {
+        res.status(200).json({message: 'Booking successfully edited'});
+    } else {
+        res.status(404).json({message: 'Booking not found'});
+    }
+});
+
+//delete a booking
+app.delete('/bookings/:id', (req, res) => {
+    const sql: string = `
+        DELETE FROM bookings
+        WHERE id = ?;
+    `;
+    const result = db.prepare(sql).run(req.query.id);
+
+    if (result.changes > 0) 
+        res.status(200).json({message: 'Booking deleted'});
+    else
+        res.status(404).json({message: 'Booking not found'});
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
