@@ -5,26 +5,86 @@ import AddRoomButton from './components/AddRoomButton';
 import '../styles/Rooms.css';
 
 const Rooms = () => {
-    const [rooms, setRooms] = useState<{id: number, roomName: string, capacity: number | '', status?: string, bookings?: number, location?: string}[]>([]);
+    const [rooms, setRooms] = useState<{id: number, room_name: string, capacity: number, status?: string, bookings?: number, location?: string}[]>([]);
     const [isRoomFormOpen, setIsRoomFormOpen] = useState<boolean>(false);
-    const [idCounter, setIdCounter] = useState<number>(0);
     const [editRoom, setEditRoom] = useState<number | null>(null);
 
-    const handleSaveRoom = (roomName: string, capacity: number | '', location?: string) => {
+    /**
+     * Handles saving a new room: sends the data to the backend and upon success it adds the new room to the state.
+     * @param room_name name of the room
+     * @param capacity capacity of the room
+     * @param location location of the room (optional)
+     */
+    const handleSaveRoom = async (room_name: string, capacity: number, location?: string): Promise<void> => {
+        try {
+            const response = await fetch('http://localhost:8000/add-room', {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({name: room_name, capacity: capacity, location: location})
+            });
+
+            const retData = await response.json();
+
+            if (!response.ok)
+                throw new Error(retData.message);
+            else {
+                setRooms([...rooms, {id: retData.id, room_name: room_name, capacity: capacity, location: location}]);
+            }
+        } catch (err) {
+            console.log((err as Error).message);
+        }
+        
         setIsRoomFormOpen(false);
-        setRooms([...rooms, {id: idCounter, roomName: roomName, capacity: capacity, location: location}]);
-        setIdCounter(prev => prev + 1);
     }
 
-    const handleEditRoom = (roomName: string, capacity: number | '', location?: string) => {
-        setRooms(rooms.map((room, index) => 
-            room.id === editRoom ? {...room, roomName: roomName, capacity: capacity, location: location} : room
-        ));
-        setEditRoom(null);
+    /**
+     * Handles editing a room: sends the new data to the backend and upon success the currently edited room id (editRoom) is set to null and the rooms state gets updated.
+     * @param room_name new name of the room
+     * @param capacity new capacity of the room
+     * @param location new location of the room
+     */
+    const handleEditRoom = async (room_name: string, capacity: number, location?: string) => {
+        try {
+            const response = await fetch('http://localhost:8000/edit-room', {
+                method: "PUT",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({id: editRoom, name: room_name, capacity: capacity, location: location})
+            });
+
+            const retData = await response.json();
+
+            if (!response.ok)
+                throw new Error(retData.message);
+            else {
+                setRooms(rooms.map(room => room.id === editRoom ? {...room, room_name, capacity, location} : room));
+                setEditRoom(null);
+            }
+        } catch (err) {
+            console.log((err as Error).message);
+        }
     };
 
-    const handleDeleteRoom = (id: number) => {
-        setRooms(rooms.filter(room => room.id !== id));
+    /**
+     * Deletes the room specified by the id parameter.
+     * @param id id of the room to be deleted
+     */
+    const handleDeleteRoom = async (id: number) => {
+        try {
+            const response = await fetch(`http://localhost:8000/delete-room/${id}`, {
+                method: "DELETE"
+            });
+
+            const retData = await response.json();
+
+            if (!response.ok)
+                throw new Error(retData.message);
+            else {
+                setRooms(rooms.filter(room => room.id !== id));
+                setEditRoom(null);
+            }
+        } catch (err) {
+            console.log((err as Error).message);
+        }
     }
 
     return (
@@ -36,11 +96,11 @@ const Rooms = () => {
             <div className='rooms-cards'>
                 {rooms.map((room, index) => (
                     room.id !== editRoom ?
-                    <Card key={index} id={room.id} roomName={room.roomName} capacity={room.capacity} 
+                    <Card key={index} id={room.id} roomName={room.room_name} capacity={room.capacity} 
                             status={room.status} bookings={room.bookings} location={room.location}
                             onEdit={setEditRoom} onDelete={() => handleDeleteRoom(room.id)}/>
                             :
-                    <RoomForm key={index} currentData={{roomName: room.roomName, capacity: room.capacity, location: room.location}}
+                    <RoomForm key={index} currentData={{roomName: room.room_name, capacity: room.capacity, location: room.location}}
                         onSave={handleEditRoom}
                         onCancel={() => setEditRoom(null)}
                     />

@@ -121,7 +121,7 @@ app.get('/rooms', (req, res) => {
 app.post('/add-room', (req, res) => {
     const sql: string = `
         INSERT INTO rooms (name, capacity, location)
-        VALUES (?, ?, ?, ?);
+        VALUES (?, ?, ?);
     `;
 
     const { name, capacity, location } = req.body;
@@ -134,6 +134,7 @@ app.post('/add-room', (req, res) => {
         res.status(201).json({message: 'Room added successfully', id: id});
     } else {
         res.status(500).json({message: 'Failed to add room'});
+        console.log(`Failed adding room`);
     }
 });
 
@@ -144,7 +145,7 @@ app.put('/edit-room', (req, res) => {
 
     const sql: string = `
         UPDATE rooms 
-        SET first_name = ?, last_name = ?, email = ?, is_admin = ?, username = ?, password = ?
+        SET name = ?, capacity = ?, location = ?
         WHERE id = ?;
     `;
     const result = db.prepare(sql).run([name, capacity, location, id]);
@@ -162,12 +163,14 @@ app.delete('/delete-room/:id', (req, res) => {
         DELETE FROM rooms
         WHERE id = ?;
     `;
-    const result = db.prepare(sql).run(req.query.id);
+    const result = db.prepare(sql).run(req.params.id);
 
     if (result.changes > 0) 
         res.status(200).json({message: 'Room deleted'});
-    else
+    else {
         res.status(404).json({message: 'Room not found'});
+        console.log(`Could not delete room with id ${req.params.id}`);
+    }
 });
 
 //----------------------------------------------------- Bookings -----------------------------------------------------
@@ -196,7 +199,7 @@ app.get('/bookings/:user_id', (req, res) => {
     `;
 
     try {
-        const bookings = db.prepare(sql).all(req.query.user_id);
+        const bookings = db.prepare(sql).all(req.params.user_id);
         res.status(200).json(bookings);
     } catch (err) {
         res.status(500).json({message: (err as Error).message});
@@ -212,7 +215,7 @@ app.get('/bookings/:room_id', (req, res) => {
     `;
 
     try {
-        const bookings = db.prepare(sql).all(req.query.room_id);
+        const bookings = db.prepare(sql).all(req.params.room_id);
         res.status(200).json(bookings);
     } catch (err) {
         res.status(500).json({message: (err as Error).message});
@@ -249,7 +252,7 @@ app.patch('/bookings/:id', (req, res) => {
         SET start_time = ?, end_time = ?
         WHERE id = ?;
     `;
-    const result = db.prepare(sql).run([start_time, end_time, req.query.id]);
+    const result = db.prepare(sql).run([start_time, end_time, req.params.id]);
 
     if (result.changes > 0) {
         res.status(200).json({message: 'Booking successfully edited'});
@@ -264,7 +267,7 @@ app.delete('/bookings/:id', (req, res) => {
         DELETE FROM bookings
         WHERE id = ?;
     `;
-    const result = db.prepare(sql).run(req.query.id);
+    const result = db.prepare(sql).run(req.params.id);
 
     if (result.changes > 0) 
         res.status(200).json({message: 'Booking deleted'});
