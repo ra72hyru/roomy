@@ -115,19 +115,21 @@ const Bookings = ({user_id}: BookingsProps) => {
         <div className='bookings-container'>
             <div className='bookings-header'>
                 <h1><span className='header-content'>{bookings.length}</span> {bookings.length !== 1 ? 'Bookings' : 'Booking'}</h1>
-                <h1 id='header-add-booking' onClick={() => setIsAddBookingFormOpen(true)}>Booking a room</h1>
+                <h1 id='header-add-booking' onClick={() => setIsAddBookingFormOpen(true)}>Book a room</h1>
             </div>
-            <div className='bookings-rows'>
-                {bookings.map((booking, index) => (
-                    editBooking !== booking.id ?
+            <div className='bookings-rows-container'>
+                <div className='bookings-rows'>
+                    {!isAddBookingFormOpen && <button onClick={() => setIsAddBookingFormOpen(true)}>Book a room</button>}
+                    {isAddBookingFormOpen && <BookingForm rooms={rooms} onSave={handleSaveBooking} onCancel={setIsAddBookingFormOpen}/>}
+                    {bookings.map((booking, index) => (
+                        editBooking !== booking.id ?
                         <Booking key={index} id={booking.id} room_name={rooms.find(r => r.room_id === booking.room_id)?.room_name ?? ''} 
-                                start_date={booking.start_time} end_date={booking.end_time} onEdit={setEditBooking} onDelete={handleDeleteBooking} /> 
-                    :
+                        start_date={booking.start_time} end_date={booking.end_time} onEdit={setEditBooking} onDelete={handleDeleteBooking} /> 
+                        :
                         <BookingForm key={index} rooms={rooms} onSave={handleEditBooking} onCancel={() => setEditBooking(null)} 
-                                    currentData={{room_id: booking.room_id, start_date: booking.start_time, end_date: booking.end_time}} />
-                ))}
-                {!isAddBookingFormOpen && <button onClick={() => setIsAddBookingFormOpen(true)}>Book a room</button>}
-                {isAddBookingFormOpen && <BookingForm rooms={rooms} onSave={handleSaveBooking} onCancel={setIsAddBookingFormOpen}/>}
+                        currentData={{room_id: booking.room_id, start_date: booking.start_time, end_date: booking.end_time}} />
+                    ))}
+                </div>
             </div>
         </div>
     )

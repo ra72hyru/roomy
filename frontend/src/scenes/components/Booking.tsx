@@ -1,5 +1,5 @@
 import {useState} from 'react';
-//import '../../styles/components/Booking.css';
+import '../../styles/components/Booking.css';
 
 interface BookingProps {
     id: number;
@@ -14,11 +14,13 @@ const Booking = ({ id, room_name, start_date, end_date, onEdit, onDelete }: Book
 
     return (
         <div className='booking'>
-            <p className='booking-info'>Room: {room_name}</p>
-            <p className='booking-info'>From: {start_date.split('-').reverse().join('.')}</p>
-            <p className='booking-info'>To: {end_date.split('-').reverse().join('.')}</p>
-            <button onClick={() => onEdit(id)}>Edit</button>
-            <button onClick={() => onDelete(id)}>Delete</button>
+            <p className='booking-info'>Room: <span className='booking-data'>{room_name}</span></p>
+            <p className='booking-info'>From: <span className='booking-data'>{start_date.split('-').reverse().join('.')}</span></p>
+            <p className='booking-info'>To: <span className='booking-data'>{end_date.split('-').reverse().join('.')}</span></p>
+            <div className='booking-buttons'>
+                <button onClick={() => onEdit(id)}>Edit</button>
+                <button onClick={() => onDelete(id)}>Delete</button>
+            </div>
         </div>
     )
 };

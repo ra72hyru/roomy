@@ -24,6 +24,7 @@ const Card = ({ id, roomName, status = 'Available', capacity, bookings = 0, loca
             {/* <button id='edit-button' onClick={() => onEdit(id)}>Edit</button> */}
             <RiDeleteBin6Line id='delete-card-button' size={24} onClick={() => onDelete(id)} />
             <MdOutlineModeEdit id='edit-card-button' size={24} onClick={() => {onEdit(id)}} />
+            <button>Show Bookings</button>
         </div>
     )
 };

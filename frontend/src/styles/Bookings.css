@@ -23,20 +23,36 @@
 }
 
 .bookings-rows {
+    background-color: var(--background-color-lvl2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     flex-wrap: nowrap;
-    gap: 48px;
+    gap: 16px;
     flex-grow: 1;
 
     overflow: auto;
     padding: 64px;
 
     scrollbar-width: none; /* Firefox */
+}
 
-    background-color: var(--background-color);
+.bookings-rows-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-grow: 1;
+
+    padding: 32px;
+
+    background-color: var(--background-color-lvl1);
+
+    overflow: auto;
+    scrollbar-width: none;
 }
 
 .header-content {

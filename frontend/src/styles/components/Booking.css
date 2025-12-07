@@ -1,0 +1,32 @@
+.booking {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+    height: 64px;
+
+    padding: 0 32px;
+
+    background-color: var(--background-color-lvl3);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.booking-data {
+    font-size: 1.5rem;
+}
+
+.booking-info {
+    font-size: 1.3rem;
+}
+
+.booking-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+#header-add-booking {
+    text-decoration: underline;
+    cursor: pointer;
+}
