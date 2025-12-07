@@ -114,7 +114,7 @@ const Bookings = ({user_id}: BookingsProps) => {
     return (
         <div className='bookings-container'>
             <div className='bookings-header'>
-                <h1><span className='header-content'></span> Bookings</h1>
+                <h1><span className='header-content'>{bookings.length}</span> {bookings.length !== 1 ? 'Bookings' : 'Booking'}</h1>
                 <h1 id='header-add-booking' onClick={() => setIsAddBookingFormOpen(true)}>Booking a room</h1>
             </div>
             <div className='bookings-rows'>

@@ -5,7 +5,7 @@ import AddRoomButton from './components/AddRoomButton';
 import '../styles/Rooms.css';
 
 const Rooms = () => {
-    const [rooms, setRooms] = useState<{id: number, room_name: string, capacity: number, status?: string, bookings?: number, location?: string}[]>([]);
+    const [rooms, setRooms] = useState<{id: number, name: string, capacity: number, status?: string, bookings?: number, location?: string}[]>([]);
     const [isRoomFormOpen, setIsRoomFormOpen] = useState<boolean>(false);
     const [editRoom, setEditRoom] = useState<number | null>(null);
 
@@ -48,7 +48,7 @@ const Rooms = () => {
             if (!response.ok)
                 throw new Error(retData.message);
             else {
-                setRooms([...rooms, {id: retData.id, room_name: room_name, capacity: capacity, location: location}]);
+                setRooms([...rooms, {id: retData.id, name: room_name, capacity: capacity, location: location}]);
             }
         } catch (err) {
             console.log((err as Error).message);
@@ -110,17 +110,17 @@ const Rooms = () => {
     return (
         <div className='rooms-container'>
             <div className='rooms-header'>
-                <h1><span className='header-content'>{rooms.length}</span> Rooms</h1>
+                <h1><span className='header-content'>{rooms.length}</span> {rooms.length !== 1 ? 'Rooms' : 'Room'}</h1>
                 <h1 id='header-add-room' onClick={() => setIsRoomFormOpen(true)}>Add Room</h1>
             </div>
             <div className='rooms-cards'>
                 {rooms.map((room, index) => (
                     room.id !== editRoom ?
-                    <Card key={index} id={room.id} roomName={room.room_name} capacity={room.capacity} 
+                    <Card key={index} id={room.id} roomName={room.name} capacity={room.capacity} 
                             status={room.status} bookings={room.bookings} location={room.location}
                             onEdit={setEditRoom} onDelete={() => handleDeleteRoom(room.id)}/>
                             :
-                    <RoomForm key={index} currentData={{roomName: room.room_name, capacity: room.capacity, location: room.location}}
+                    <RoomForm key={index} currentData={{roomName: room.name, capacity: room.capacity, location: room.location}}
                         onSave={handleEditRoom}
                         onCancel={() => setEditRoom(null)}
                     />
