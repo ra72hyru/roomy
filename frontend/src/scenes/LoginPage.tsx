@@ -3,7 +3,7 @@ import '../styles/LoginPage.css';
 import { useNavigate } from 'react-router-dom';
 
 interface LoginPageProps {
-    onLogin: (isAdmin: boolean) => void
+    onLogin: (isAdmin: boolean, user_id: number) => void
 }
 
 const LoginPage = ({ onLogin }: LoginPageProps) => {
@@ -25,7 +25,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                 throw new Error('Invalid Username or Password');
             } else {
                 const retUser = await response.json();
-                onLogin(retUser.is_admin);
+                onLogin(retUser.is_admin, retUser.id);
                 navigate('/dashboard');
             }
         } catch (err) {

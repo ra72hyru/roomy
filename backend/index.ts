@@ -226,6 +226,7 @@ app.get('/bookings/:room_id', (req, res) => {
 
 //add a booking
 app.post('/bookings/add', (req, res) => {
+    console.log(req.body);
     const sql: string = `
         INSERT INTO bookings (user_id, room_id, start_time, end_time)
         VALUES (?, ?, ?, ?);

@@ -9,12 +9,14 @@ import Users from './scenes/Users';
 import Bookings from './scenes/Bookings';
 
 function App() {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [userId, setUserId] = useState<number>(-1);
 
-  const handleLogin = (admin: boolean) => {
+  const handleLogin = (admin: boolean, user_id: number) => {
     setIsAdmin(admin);
     setIsLoggedIn(true);
+    setUserId(user_id);
   };
 
   return (
@@ -26,7 +28,7 @@ function App() {
           <Route path='/dashboard' element={isAdmin ? <Dashboard /> : <Navigate to='/login' />} />
           <Route path='/rooms' element={isAdmin ? <Rooms /> : <Navigate to='/login' />} />
           <Route path='/users' element={isAdmin ? <Users /> : <Navigate to='/login' />} />
-          <Route path='/bookings' element={isAdmin ? <Bookings user_id={0} /> : <Navigate to='/login' />} />
+          <Route path='/bookings' element={isAdmin ? <Bookings user_id={userId} /> : <Navigate to='/login' />} />
           <Route path='/' element={<Navigate to={isLoggedIn ? '/dashboard' : '/login'} />} />
         </Routes>
       </div>
