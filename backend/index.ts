@@ -186,7 +186,7 @@ app.get('/bookings', (req, res) => {
 
     try {
         const bookings = db.prepare(sql).all();
-        res.status(200).json(bookings);
+        res.status(200).json({bookings: bookings});
     } catch (err) {
         res.status(500).json({message: (err as Error).message});
     }
@@ -202,7 +202,8 @@ app.get('/bookings/:user_id', (req, res) => {
 
     try {
         const bookings = db.prepare(sql).all(req.params.user_id);
-        res.status(200).json(bookings);
+        //console.log(bookings);
+        res.status(200).json({bookings: bookings});
     } catch (err) {
         res.status(500).json({message: (err as Error).message});
     }
@@ -218,7 +219,7 @@ app.get('/bookings/:room_id', (req, res) => {
 
     try {
         const bookings = db.prepare(sql).all(req.params.room_id);
-        res.status(200).json(bookings);
+        res.status(200).json({bookings: bookings});
     } catch (err) {
         res.status(500).json({message: (err as Error).message});
     }
@@ -226,7 +227,7 @@ app.get('/bookings/:room_id', (req, res) => {
 
 //add a booking
 app.post('/bookings/add', (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     const sql: string = `
         INSERT INTO bookings (user_id, room_id, start_time, end_time)
         VALUES (?, ?, ?, ?);
@@ -247,15 +248,15 @@ app.post('/bookings/add', (req, res) => {
 
 //edit a booking
 app.patch('/bookings/:id', (req, res) => {
-    const { start_time, end_time } = req.body;
+    const { room_id, start_time, end_time } = req.body;
     //TODO: check if variables exist
 
     const sql: string = `
         UPDATE bookings 
-        SET start_time = ?, end_time = ?
+        SET room_id = ?, start_time = ?, end_time = ?
         WHERE id = ?;
     `;
-    const result = db.prepare(sql).run([start_time, end_time, req.params.id]);
+    const result = db.prepare(sql).run([room_id, start_time, end_time, req.params.id]);
 
     if (result.changes > 0) {
         res.status(200).json({message: 'Booking successfully edited'});
