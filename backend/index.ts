@@ -197,7 +197,8 @@ app.get('/bookings/:user_id', (req, res) => {
     const sql: string = `
         SELECT *
         FROM bookings
-        WHERE user_id = ?;
+        WHERE user_id = ?
+        ORDER BY start_time ASC, end_time ASC;
     `;
 
     try {
