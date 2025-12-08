@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import '../styles/LoginPage.css';
 import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../Authorization';
 
-interface LoginPageProps {
-    onLogin: (isAdmin: boolean, user_id: number) => void
-}
-
-const LoginPage = ({ onLogin }: LoginPageProps) => {
+const LoginPage = () => {
     const [user, setUser] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
+
+    const {login} = useAuthContext();
 
     const navigate = useNavigate();
 
@@ -24,8 +23,9 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
             if (!response.ok) {
                 throw new Error('Invalid Username or Password');
             } else {
-                const retUser = await response.json();
-                onLogin(retUser.is_admin, retUser.id);
+                const retData = await response.json();
+                const retUser = retData.user;
+                login({user_id: retUser.id, first_name: retUser.first_name, last_name: retUser.last_name, is_admin: retUser.is_admin});
                 navigate('/dashboard');
             }
         } catch (err) {

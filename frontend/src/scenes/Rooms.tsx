@@ -3,11 +3,14 @@ import Card from './components/Card';
 import RoomForm from './components/RoomForm';
 import AddRoomButton from './components/AddRoomButton';
 import '../styles/Rooms.css';
+import { useAuthContext } from '../Authorization';
 
 const Rooms = () => {
     const [rooms, setRooms] = useState<{id: number, name: string, capacity: number, status?: string, bookings?: number, location?: string}[]>([]);
     const [isRoomFormOpen, setIsRoomFormOpen] = useState<boolean>(false);
     const [editRoom, setEditRoom] = useState<number | null>(null);
+
+    const {user} = useAuthContext();
 
     const getRooms= async (): Promise<void> => {
             try {
@@ -111,7 +114,7 @@ const Rooms = () => {
         <div className='rooms-container'>
             <div className='rooms-header'>
                 <h1><span className='header-content'>{rooms.length}</span> {rooms.length !== 1 ? 'Rooms' : 'Room'}</h1>
-                <h1 id='header-add-room' onClick={() => setIsRoomFormOpen(true)}>Add Room</h1>
+                {Boolean(user?.is_admin) && <h1 id='header-add-room' onClick={() => setIsRoomFormOpen(true)}>Add Room</h1>}
             </div>
             <div className='rooms-cards'>
                 {rooms.map((room, index) => (
@@ -125,7 +128,7 @@ const Rooms = () => {
                         onCancel={() => setEditRoom(null)}
                     />
                 ))}
-                {!isRoomFormOpen && <AddRoomButton addRoom={setIsRoomFormOpen} />}
+                {(!isRoomFormOpen && Boolean(user?.is_admin)) && <AddRoomButton addRoom={setIsRoomFormOpen} />}
                 {isRoomFormOpen && <RoomForm onCancel={setIsRoomFormOpen} onSave={handleSaveRoom} />}
             </div>
         </div>

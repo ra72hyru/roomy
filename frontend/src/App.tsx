@@ -7,33 +7,26 @@ import Rooms from './scenes/Rooms';
 import Sidebar from './scenes/components/Sidebar';
 import Users from './scenes/Users';
 import Bookings from './scenes/Bookings';
+import AuthContext, { AuthorizationContext, useAuthContext } from './Authorization';
 
 function App() {
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [userId, setUserId] = useState<number>(-1);
+    const {user} = useAuthContext();
 
-  const handleLogin = (admin: boolean, user_id: number) => {
-    setIsAdmin(admin);
-    setIsLoggedIn(true);
-    setUserId(user_id);
-  };
-
-  return (
-    <BrowserRouter>
-      <div className="app">
-        {isLoggedIn && <Sidebar />}
-        <Routes>
-          <Route path='/login' element={<LoginPage onLogin={handleLogin} />} />
-          <Route path='/dashboard' element={isAdmin ? <Dashboard /> : <Navigate to='/login' />} />
-          <Route path='/rooms' element={isAdmin ? <Rooms /> : <Navigate to='/login' />} />
-          <Route path='/users' element={isAdmin ? <Users /> : <Navigate to='/login' />} />
-          <Route path='/bookings' element={isAdmin ? <Bookings user_id={userId} /> : <Navigate to='/login' />} />
-          <Route path='/' element={<Navigate to={isLoggedIn ? '/dashboard' : '/login'} />} />
-        </Routes>
-      </div>
-    </BrowserRouter>
-  )
+    return (
+        <BrowserRouter>
+          <div className="app">
+            {user && <Sidebar />}
+            <Routes>
+              <Route path='/login' element={<LoginPage /* onLogin={handleLogin} */ />} />
+              <Route path='/dashboard' element={user ? <Dashboard /> : <Navigate to='/login' />} />
+              <Route path='/rooms' element={user ? <Rooms /> : <Navigate to='/login' />} />
+              <Route path='/users' element={user?.is_admin ? <Users /> : <Navigate to='/login' />} />
+              <Route path='/bookings' element={user ? <Bookings user_id={user.user_id} /> : <Navigate to='/login' />} />
+              <Route path='/' element={<Navigate to={user ? '/dashboard' : '/login'} />} />
+            </Routes>
+          </div>
+        </BrowserRouter>
+    )
 }
 
 export default App;
