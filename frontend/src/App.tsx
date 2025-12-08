@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import LoginPage from './scenes/LoginPage';
@@ -7,7 +6,7 @@ import Rooms from './scenes/Rooms';
 import Sidebar from './scenes/components/Sidebar';
 import Users from './scenes/Users';
 import Bookings from './scenes/Bookings';
-import AuthContext, { AuthorizationContext, useAuthContext } from './Authorization';
+import { useAuthContext } from './Authorization';
 
 function App() {
     const {user} = useAuthContext();

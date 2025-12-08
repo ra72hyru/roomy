@@ -1,4 +1,3 @@
-import React from 'react';
 import '../../styles/components/Card.css';
 import { MdOutlineModeEdit } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";

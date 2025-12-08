@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Card from './components/Card';
 import RoomForm from './components/RoomForm';
 import AddRoomButton from './components/AddRoomButton';
