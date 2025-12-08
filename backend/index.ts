@@ -211,18 +211,21 @@ app.get('/bookings/:user_id', (req, res) => {
 });
 
 //get all bookings for a specific room
-app.get('/bookings/:room_id', (req, res) => {
+app.get('/bookings/rooms/:room_id', (req, res) => {
     const sql: string = `
-        SELECT *
-        FROM bookings
-        WHERE room_id = ?;
+        SELECT b.id, first_name, last_name, room_id, start_time, end_time
+        FROM bookings b LEFT JOIN users u ON b.user_id = u.id
+        WHERE room_id = ?
+        ORDER BY start_time ASC, end_time ASC;
     `;
 
     try {
         const bookings = db.prepare(sql).all(req.params.room_id);
+        console.log('bookings: ', bookings);
         res.status(200).json({bookings: bookings});
     } catch (err) {
         res.status(500).json({message: (err as Error).message});
+        console.log('failed to fetch bookings for room');
     }
 });
 

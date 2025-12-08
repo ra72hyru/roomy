@@ -2,21 +2,24 @@ import '../../styles/components/Card.css';
 import { MdOutlineModeEdit } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useAuthContext } from '../../Authorization';
+import { useEffect, useState } from 'react';
 
 interface CardProps {
     id: number;
     roomName: string;
     capacity: number | '';
     status?: string;
-    bookings?: number;
     location?: string;
     onEdit: (id: number) => void;
     onDelete: (id: number) => void;
+    onShowBookings: (room_id: number) => void;
 }
 
-const Card = ({ id, roomName, status = 'Available', capacity, bookings = 0, location, onEdit, onDelete }: CardProps) => {
+const Card = ({ id, roomName, status = 'Available', capacity, location, onEdit, onDelete, onShowBookings }: CardProps) => {
+    const [bookings, setBookings] = useState([]);
+
     const {user} = useAuthContext();
-    
+
     return (
         <div className='card'>
             <h2>{roomName}</h2>
@@ -26,7 +29,7 @@ const Card = ({ id, roomName, status = 'Available', capacity, bookings = 0, loca
             {/* <button id='edit-button' onClick={() => onEdit(id)}>Edit</button> */}
             {Boolean(user?.is_admin) && <RiDeleteBin6Line id='delete-card-button' size={24} onClick={() => onDelete(id)} />}
             {Boolean(user?.is_admin) && <MdOutlineModeEdit id='edit-card-button' size={24} onClick={() => {onEdit(id)}} />}
-            <button>Show Bookings</button>
+            <button onClick={() => onShowBookings(id)}>Show Bookings</button>
         </div>
     )
 };

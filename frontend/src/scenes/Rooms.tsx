@@ -4,29 +4,41 @@ import RoomForm from './components/RoomForm';
 import AddRoomButton from './components/AddRoomButton';
 import '../styles/Rooms.css';
 import { useAuthContext } from '../Authorization';
+import Booking from './components/Booking';
+
+interface BookingType {
+    id: number;
+    first_name?: string;
+    last_name?: string;
+    room_id: number;
+    start_time: string;
+    end_time: string;
+}
 
 const Rooms = () => {
-    const [rooms, setRooms] = useState<{id: number, name: string, capacity: number, status?: string, bookings?: number, location?: string}[]>([]);
+    const [rooms, setRooms] = useState<{id: number, name: string, capacity: number, status?: string, location?: string}[]>([]);
     const [isRoomFormOpen, setIsRoomFormOpen] = useState<boolean>(false);
     const [editRoom, setEditRoom] = useState<number | null>(null);
+    const [roomBookings, setRoomBookings] = useState<BookingType[]>([]);
+    const [showRoomBookings, setShowRoomBookings] = useState<boolean>(false);
 
     const {user} = useAuthContext();
 
-    const getRooms= async (): Promise<void> => {
-            try {
-                const response = await fetch('http://localhost:8000/rooms');
-    
-                if (!response.ok)
-                    throw new Error();
-                else {
-                    const retData = await response.json();
-                    console.log(retData.rooms);
-                    setRooms(retData.rooms);
-                }
-            } catch (err) {
-                console.log((err as Error).message);
+    const getRooms = async (): Promise<void> => {
+        try {
+            const response = await fetch('http://localhost:8000/rooms');
+
+            if (!response.ok)
+                throw new Error();
+            else {
+                const retData = await response.json();
+                console.log(retData.rooms);
+                setRooms(retData.rooms);
             }
+        } catch (err) {
+            console.log((err as Error).message);
         }
+    };
     
     useEffect(() => {
         getRooms();
@@ -58,7 +70,7 @@ const Rooms = () => {
         }
         
         setIsRoomFormOpen(false);
-    }
+    };
 
     /**
      * Handles editing a room: sends the new data to the backend and upon success the currently edited room id (editRoom) is set to null and the rooms state gets updated.
@@ -108,7 +120,30 @@ const Rooms = () => {
         } catch (err) {
             console.log((err as Error).message);
         }
-    }
+    };
+
+    const handleShowRoomBookings = async (room_id: number) => {
+        try {
+            const response = await fetch(`http://localhost:8000/bookings/rooms/${room_id}`);
+            const retData = await response.json();
+
+            if (!response.ok)
+                throw new Error(retData.message);
+            else {
+                console.log('bookings returned are: ', retData.bookings);
+                setRoomBookings(retData.bookings);
+                setShowRoomBookings(true);
+                console.log('roomBookings is now: ', roomBookings);
+            }
+        } catch (err) {
+            console.log((err as Error).message);
+        }
+    };
+
+    useEffect(() => {
+        console.log('daten sind da', roomBookings);
+
+    }, [roomBookings]);
 
     return (
         <div className='rooms-container'>
@@ -116,21 +151,31 @@ const Rooms = () => {
                 <h1><span className='header-content'>{rooms.length}</span> {rooms.length !== 1 ? 'Rooms' : 'Room'}</h1>
                 {Boolean(user?.is_admin) && <h1 id='header-add-room' onClick={() => setIsRoomFormOpen(true)}>Add Room</h1>}
             </div>
-            <div className='rooms-cards'>
-                {rooms.map((room, index) => (
-                    room.id !== editRoom ?
-                    <Card key={index} id={room.id} roomName={room.name} capacity={room.capacity} 
-                            status={room.status} bookings={room.bookings} location={room.location}
-                            onEdit={setEditRoom} onDelete={() => handleDeleteRoom(room.id)}/>
-                            :
-                    <RoomForm key={index} currentData={{roomName: room.name, capacity: room.capacity, location: room.location}}
-                        onSave={handleEditRoom}
-                        onCancel={() => setEditRoom(null)}
-                    />
-                ))}
-                {(!isRoomFormOpen && Boolean(user?.is_admin)) && <AddRoomButton addRoom={setIsRoomFormOpen} />}
-                {isRoomFormOpen && <RoomForm onCancel={setIsRoomFormOpen} onSave={handleSaveRoom} />}
-            </div>
+            {showRoomBookings ? 
+                <div>
+                    {roomBookings.map((booking, index) => (
+                        <Booking key={index} id={booking.id} room_name={rooms.find(r => r.id === booking.room_id)?.name ?? ''} 
+                                start_date={booking.start_time} end_date={booking.end_time} onDelete={() => {}} onEdit={() => {}} />
+                    ))}
+                    <button onClick={() => setShowRoomBookings(false)}>Go back</button>
+                </div> 
+            :
+                <div className='rooms-cards'>
+                    {rooms.map((room, index) => (
+                        room.id !== editRoom ?
+                        <Card key={index} id={room.id} roomName={room.name} capacity={room.capacity} 
+                                status={room.status} location={room.location}
+                                onEdit={setEditRoom} onDelete={() => handleDeleteRoom(room.id)} onShowBookings={handleShowRoomBookings} />
+                                :
+                        <RoomForm key={index} currentData={{roomName: room.name, capacity: room.capacity, location: room.location}}
+                            onSave={handleEditRoom}
+                            onCancel={() => setEditRoom(null)}
+                        />
+                    ))}
+                    {(!isRoomFormOpen && Boolean(user?.is_admin)) && <AddRoomButton addRoom={setIsRoomFormOpen} />}
+                    {isRoomFormOpen && <RoomForm onCancel={setIsRoomFormOpen} onSave={handleSaveRoom} />}
+                </div>
+            }
         </div>
     )
 };
