@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import Card from './components/Card';
 import RoomForm from './components/RoomForm';
 import AddRoomButton from './components/AddRoomButton';
@@ -8,8 +8,9 @@ import Booking from './components/Booking';
 
 interface BookingType {
     id: number;
-    first_name?: string;
-    last_name?: string;
+    user_id: number;
+    first_name: string;
+    last_name: string;
     room_id: number;
     start_time: string;
     end_time: string;
@@ -21,6 +22,7 @@ const Rooms = () => {
     const [editRoom, setEditRoom] = useState<number | null>(null);
     const [roomBookings, setRoomBookings] = useState<BookingType[]>([]);
     const [showRoomBookings, setShowRoomBookings] = useState<boolean>(false);
+    const [currentRoom, setCurrentRoom] = useState<string>('');
 
     const {user} = useAuthContext();
 
@@ -131,6 +133,7 @@ const Rooms = () => {
                 throw new Error(retData.message);
             else {
                 console.log('bookings returned are: ', retData.bookings);
+                setCurrentRoom(rooms.find(r => r.id === room_id)?.name ?? '');
                 setRoomBookings(retData.bookings);
                 setShowRoomBookings(true);
                 console.log('roomBookings is now: ', roomBookings);
@@ -148,15 +151,28 @@ const Rooms = () => {
     return (
         <div className='rooms-container'>
             <div className='rooms-header'>
-                <h1><span className='header-content'>{rooms.length}</span> {rooms.length !== 1 ? 'Rooms' : 'Room'}</h1>
-                {Boolean(user?.is_admin) && <h1 id='header-add-room' onClick={() => setIsRoomFormOpen(true)}>Add Room</h1>}
+                {showRoomBookings ? 
+                    (<h3>Bookings for room: {currentRoom}</h3>) 
+                :
+                    <>
+                        <h1><span className='header-content'>{rooms.length}</span> {rooms.length !== 1 ? 'Rooms' : 'Room'}</h1>
+                        {Boolean(user?.is_admin) && <h1 id='header-add-room' onClick={() => setIsRoomFormOpen(true)}>Add Room</h1>}
+                    </>
+                }
             </div>
             {showRoomBookings ? 
                 <div>
-                    {roomBookings.map((booking, index) => (
-                        <Booking key={index} id={booking.id} room_name={rooms.find(r => r.id === booking.room_id)?.name ?? ''} 
-                                start_date={booking.start_time} end_date={booking.end_time} onDelete={() => {}} onEdit={() => {}} />
-                    ))}
+                    {roomBookings.length !== 0 ? 
+                        (roomBookings.map((booking, index) => (
+                            <Booking key={index} id={booking.id} room_name={rooms.find(r => r.id === booking.room_id)?.name ?? ''} 
+                                    start_date={booking.start_time} end_date={booking.end_time} user_id={booking.user_id} 
+                                    first_name={booking.first_name} last_name={booking.last_name}
+                                    onDelete={() => {}} onEdit={() => {}} />)))
+                            :
+                            (<div>
+                                <h1>This room has no bookings</h1>
+                            </div>)
+                    }
                     <button onClick={() => setShowRoomBookings(false)}>Go back</button>
                 </div> 
             :

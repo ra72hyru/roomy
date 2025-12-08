@@ -13,6 +13,7 @@ const Bookings = ({user_id}: BookingsProps) => {
     const [editBooking, setEditBooking] = useState<number | null>(null);
     const [isAddBookingFormOpen, setIsAddBookingFormOpen] = useState<boolean>(false);
 
+    //Get all bookings for the current user
     useEffect(() => {
         (async (): Promise<void> => {
             try {
@@ -31,6 +32,7 @@ const Bookings = ({user_id}: BookingsProps) => {
         })();
     }, []);
 
+    //get all room IDs and names for the booking form
     useEffect(() => {
         (async (): Promise<void> => {
             try {
@@ -50,6 +52,12 @@ const Bookings = ({user_id}: BookingsProps) => {
         })();
     }, []);
 
+    /**
+     * Handles adding a new booking and sends it to the database.
+     * @param room_id ID of the booked room
+     * @param start_date date of the first booked day 
+     * @param end_date date of the last booked day
+     */
     const handleSaveBooking = async (room_id: number, start_date: string, end_date: string) => {
         try {
             const response = await fetch('http://localhost:8000/bookings/add', {
@@ -72,6 +80,12 @@ const Bookings = ({user_id}: BookingsProps) => {
         }
     };
     
+    /**
+     * Handles editing a booking and sends it to the database.
+     * @param room_id the ID of the new room
+     * @param start_date the new date of the first booked day
+     * @param end_date the new date of the last booked day
+     */
     const handleEditBooking = async (room_id: number, start_date: string, end_date: string) => {
         try {
             const response = await fetch(`http://localhost:8000/bookings/${editBooking}`, {
@@ -93,6 +107,10 @@ const Bookings = ({user_id}: BookingsProps) => {
         }
     };
 
+    /**
+     * Handles deleting a room and sends the request to the database.
+     * @param id ID of the booking to be deleted
+     */
     const handleDeleteBooking = async (id: number) => {
         try {
             const response = await fetch(`http://localhost:8000/bookings/${id}`, {

@@ -213,7 +213,7 @@ app.get('/bookings/:user_id', (req, res) => {
 //get all bookings for a specific room
 app.get('/bookings/rooms/:room_id', (req, res) => {
     const sql: string = `
-        SELECT b.id, first_name, last_name, room_id, start_time, end_time
+        SELECT b.id, b.user_id, first_name, last_name, room_id, start_time, end_time
         FROM bookings b LEFT JOIN users u ON b.user_id = u.id
         WHERE room_id = ?
         ORDER BY start_time ASC, end_time ASC;
