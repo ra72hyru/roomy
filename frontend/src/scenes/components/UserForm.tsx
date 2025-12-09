@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 
 interface UserFormProps {
-    onSave: (first_name: string, last_name: string, email: string, is_admin: boolean) => void;
     onCancel: (isAddUserFormOpen: boolean) => void;
+    onSave: (first_name: string, last_name: string, email: string, is_admin: boolean) => void;
     currentData?: {first_name?: string, last_name?: string, email?: string, is_admin?: boolean};
 }
 
@@ -20,7 +20,7 @@ const UserForm = ({ onSave, onCancel, currentData }: UserFormProps) => {
                 <input type="email" placeholder="Email" onChange={e => setEmail(e.target.value)} value={email} />
                 <input type='checkbox' name='adminCheckbox' onChange={e => setIsAdmin(e.target.checked)} checked={is_admin} />
                 <label htmlFor='adminCheckbox'>Admin</label>
-                <button onClick={() => onSave(first_name, last_name, email, is_admin)} type="submit">Save</button>
+                <button onClick={() => onSave(first_name, last_name, email, is_admin)} type="submit">{currentData ? 'Save' : 'Add'}</button>
                 <button onClick={() => onCancel(false)}>Cancel</button>
 
         </div>
