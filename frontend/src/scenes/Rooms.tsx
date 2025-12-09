@@ -143,11 +143,6 @@ const Rooms = () => {
         }
     };
 
-    useEffect(() => {
-        console.log('daten sind da', roomBookings);
-
-    }, [roomBookings]);
-
     return (
         <div className='rooms-container'>
             <div className='rooms-header'>

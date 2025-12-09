@@ -16,15 +16,13 @@ interface CardProps {
 }
 
 const Card = ({ id, roomName, status = 'Available', capacity, location, onEdit, onDelete, onShowBookings }: CardProps) => {
-    const [bookings, setBookings] = useState([]);
-
     const {user} = useAuthContext();
 
     return (
         <div className='card'>
             <h2>{roomName}</h2>
             <p>Status: <span>{status}</span></p>
-            <p>Capacity: <span>{bookings} / {capacity}</span></p>
+            <p>Capacity: <span>{capacity}</span></p>
             {location && <p>Location: <span>{location}</span></p>}
             {/* <button id='edit-button' onClick={() => onEdit(id)}>Edit</button> */}
             {Boolean(user?.is_admin) && <RiDeleteBin6Line id='delete-card-button' size={24} onClick={() => onDelete(id)} />}

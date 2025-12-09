@@ -193,7 +193,25 @@ app.get('/bookings', (req, res) => {
 });
 
 //get all bookings for a specific user
-app.get('/bookings/:user_id', (req, res) => {
+app.get('/bookings/user/:user_id', (req, res) => {
+    const sql: string = `
+        SELECT b.id AS booking_id, b.user_id, b.room_id, u.first_name, u.last_name, r.name AS room_name, b.start_time, b.end_time
+        FROM bookings b LEFT JOIN users u ON b.user_id = u.id LEFT JOIN rooms r ON b.room_id = r.id
+        WHERE user_id = ?
+        ORDER BY start_time ASC, end_time ASC;
+    `;
+
+    try {
+        const bookings = db.prepare(sql).all(req.params.user_id);
+        //console.log(bookings);
+        res.status(200).json({bookings: bookings});
+    } catch (err) {
+        res.status(500).json({message: (err as Error).message});
+    }
+});
+
+//get all bookings for a specific user
+/* app.get('/bookings/user/:user_id', (req, res) => {
     const sql: string = `
         SELECT *
         FROM bookings
@@ -208,16 +226,22 @@ app.get('/bookings/:user_id', (req, res) => {
     } catch (err) {
         res.status(500).json({message: (err as Error).message});
     }
-});
+}); */
 
 //get all bookings for a specific room
-app.get('/bookings/rooms/:room_id', (req, res) => {
+app.get('/bookings/room/:room_id', (req, res) => {
     const sql: string = `
+        SELECT b.id AS booking_id, b.user_id, b.room_id, first_name, last_name, r.name AS room_name, start_time, end_time
+        FROM bookings b LEFT JOIN users u ON b.user_id = u.id LEFT JOIN rooms r ON b.room_id = r.id
+        WHERE room_id = ?
+        ORDER BY start_time ASC, end_time ASC;
+    `;
+    /* const sql: string = `
         SELECT b.id, b.user_id, first_name, last_name, room_id, start_time, end_time
         FROM bookings b LEFT JOIN users u ON b.user_id = u.id
         WHERE room_id = ?
         ORDER BY start_time ASC, end_time ASC;
-    `;
+    `; */
 
     try {
         const bookings = db.prepare(sql).all(req.params.room_id);
@@ -244,7 +268,14 @@ app.post('/bookings/add', (req, res) => {
         const id: number = Number(result.lastInsertRowid);
         console.log(`Added booking with id ${id}`);
 
-        res.status(201).json({message: 'Booking added successfully', id: id});
+        const newBooking: any = db.prepare(`
+            SELECT b.id AS booking_id, b.user_id, b.room_id, first_name, last_name, r.name AS room_name, start_time, end_time
+            FROM bookings b LEFT JOIN users u ON b.user_id = u.id LEFT JOIN rooms r ON b.room_id = r.id
+            WHERE b.id = ?
+        `).get(id);
+        
+
+        res.status(201).json({message: 'Booking added successfully', booking: newBooking});
     } else {
         res.status(500).json({message: 'Failed to add booking'});
     }
