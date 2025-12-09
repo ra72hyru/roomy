@@ -100,6 +100,9 @@ export const useBookings = ({user_id, room_id}: {user_id?: number, room_id?: num
      * @param end_date the new date of the last booked day
      */
     const handleEditBooking = async (editBookingID: number, room_id: number, room_name: string, start_date: string, end_date: string) => {
+        if (editBookingID < 0)
+            return;
+        
         try {
             console.log(editBookingID, room_id, room_name);
             const response = await fetch(`${url}/bookings/${editBookingID}`, {
