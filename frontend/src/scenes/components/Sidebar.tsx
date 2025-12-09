@@ -5,13 +5,13 @@ import { useAuthContext } from '../../Authorization';
 
 const Sidebar = () => {
     const navigate = useNavigate();
-    const {logout} = useAuthContext();
+    const {user, logout} = useAuthContext();
 
     return (
         <div className='sidebar'>
             Sidebar<br></br>
             <button onClick={() => navigate('/rooms')}>Rooms</button><br></br>
-            <button onClick={() => navigate('/users')}>Users</button><br></br>
+            {Boolean(user?.is_admin) && <><button onClick={() => navigate('/users')}>Users</button><br></br></>}
             <button onClick={() => navigate('/bookings')}>Bookings</button><br></br>
             <button onClick={() => logout()}>Logout</button>
         </div>

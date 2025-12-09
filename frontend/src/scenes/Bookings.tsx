@@ -37,7 +37,7 @@ const Bookings = ({user_id}: BookingsProps) => {
                     {isAddBookingFormOpen && <BookingForm rooms={rooms} onBook={handleAddBookingWrapper} onCancel={setIsAddBookingFormOpen}/>}
                     {bookings.map((booking, index) => (
                         editBooking !== booking.booking_id ?
-                        <Booking key={index} id={booking.booking_id} room_name={booking.room_name} 
+                        <Booking key={index} id={booking.booking_id} room_name={booking.room_name} user_id={booking.user_id}
                         start_date={booking.start_time} end_date={booking.end_time} onEdit={setEditBooking} onDelete={handleDeleteBooking} /> 
                         :
                         <BookingForm key={index} rooms={rooms} onSave={handleEditBookingWrapper} onCancel={() => setEditBooking(null)} 
