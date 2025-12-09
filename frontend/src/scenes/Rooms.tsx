@@ -5,6 +5,8 @@ import AddRoomButton from './components/AddRoomButton';
 import '../styles/Rooms.css';
 import { useAuthContext } from '../Authorization';
 import Booking from './components/Booking';
+import { useBookings } from '../../hooks/useBookings.ts';
+import BookingForm from './components/BookingForm.tsx';
 
 interface BookingType {
     id: number;
@@ -20,9 +22,12 @@ const Rooms = () => {
     const [rooms, setRooms] = useState<{id: number, name: string, capacity: number, status?: string, location?: string}[]>([]);
     const [isRoomFormOpen, setIsRoomFormOpen] = useState<boolean>(false);
     const [editRoom, setEditRoom] = useState<number | null>(null);
-    const [roomBookings, setRoomBookings] = useState<BookingType[]>([]);
+
+    //states for bookings per room
     const [showRoomBookings, setShowRoomBookings] = useState<boolean>(false);
     const [currentRoom, setCurrentRoom] = useState<string>('');
+    const [currentRoomId, setCurrentRoomId] = useState<number | null>(null);
+    const [editBooking, setEditBooking] = useState<number | null>(null);
 
     const {user} = useAuthContext();
 
@@ -124,23 +129,17 @@ const Rooms = () => {
         }
     };
 
-    const handleShowRoomBookings = async (room_id: number) => {
-        try {
-            const response = await fetch(`http://localhost:8000/bookings/rooms/${room_id}`);
-            const retData = await response.json();
+    const {bookings, handleEditBooking, handleDeleteBooking} = useBookings({room_id: currentRoomId ?? -1});
 
-            if (!response.ok)
-                throw new Error(retData.message);
-            else {
-                console.log('bookings returned are: ', retData.bookings);
-                setCurrentRoom(rooms.find(r => r.id === room_id)?.name ?? '');
-                setRoomBookings(retData.bookings);
-                setShowRoomBookings(true);
-                console.log('roomBookings is now: ', roomBookings);
-            }
-        } catch (err) {
-            console.log((err as Error).message);
-        }
+    const handleEditBookingWrapper = async (room_id: number, room_name: string, start_time: string, end_time: string) => {
+        await handleEditBooking(editBooking ?? -1, room_id, room_name, start_time, end_time);
+        setEditBooking(null);
+    };
+
+    const showRoomBookingsWrapper = (id: number, room_name: string) => {
+        setCurrentRoomId(id);
+        setShowRoomBookings(true);
+        setCurrentRoom(room_name);
     };
 
     return (
@@ -157,13 +156,17 @@ const Rooms = () => {
             </div>
             {showRoomBookings ? 
                 <div>
-                    {roomBookings.length !== 0 ? 
-                        (roomBookings.map((booking, index) => (
-                            <Booking key={index} id={booking.id} room_name={rooms.find(r => r.id === booking.room_id)?.name ?? ''} 
-                                    start_date={booking.start_time} end_date={booking.end_time} user_id={booking.user_id} 
-                                    first_name={booking.first_name} last_name={booking.last_name}
-                                    onDelete={() => {}} onEdit={() => {}} />)))
-                            :
+                    {bookings.length !== 0 ? 
+                            (bookings.map((booking, index) => (
+                                editBooking !== booking.booking_id ? 
+                                        <Booking key={index} id={booking.booking_id} room_name={booking.room_name} start_date={booking.start_time} end_date={booking.end_time}
+                                            first_name={booking.first_name} last_name={booking.last_name} onDelete={handleDeleteBooking} onEdit={setEditBooking} />
+                                    :
+                                        <BookingForm key={index} rooms={rooms.map(r => ({room_id: r.id, room_name: r.name}))} 
+                                            onSave={handleEditBookingWrapper} onCancel={() => setEditBooking(null)}
+                                            currentData={{room_id: booking.room_id, room_name: booking.room_name, start_date: booking.start_time, end_date: booking.end_time}} />
+                            ))) 
+                        : 
                             (<div>
                                 <h1>This room has no bookings</h1>
                             </div>)
@@ -176,7 +179,7 @@ const Rooms = () => {
                         room.id !== editRoom ?
                         <Card key={index} id={room.id} roomName={room.name} capacity={room.capacity} 
                                 status={room.status} location={room.location}
-                                onEdit={setEditRoom} onDelete={() => handleDeleteRoom(room.id)} onShowBookings={handleShowRoomBookings} />
+                                onEdit={setEditRoom} onDelete={() => handleDeleteRoom(room.id)} onShowBookings={showRoomBookingsWrapper} />
                                 :
                         <RoomForm key={index} currentData={{roomName: room.name, capacity: room.capacity, location: room.location}}
                             onSave={handleEditRoom}

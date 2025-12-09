@@ -21,7 +21,7 @@ const Booking = ({ id, room_name, start_date, end_date, user_id, first_name, las
     return (
         <div className='booking'>
             <p className='booking-info'>Room: <span className='booking-data'>{room_name}</span></p>
-            <p className='booking-info'>By: <span className='booking-data'>{first_name} {last_name}</span></p>
+            {(first_name || last_name) && <p className='booking-info'>By: <span className='booking-data'>{first_name} {last_name}</span></p>}
             <p className='booking-info'>From: <span className='booking-data'>{start_date.split('-').reverse().join('.')}</span></p>
             <p className='booking-info'>To: <span className='booking-data'>{end_date.split('-').reverse().join('.')}</span></p>
             {(user?.user_id === user_id || Boolean(user?.is_admin)) && <div className='booking-buttons'>

@@ -20,6 +20,7 @@ export const useBookings = ({user_id, room_id}: {user_id?: number, room_id?: num
 
     //Get all bookings for the current user
     useEffect(() => {
+        if (user_id && user_id < 0 || room_id && room_id < 0) return;
         (async (): Promise<void> => {
             try {
                 //if user_id is given as parameter use that, otherwise the room_id if it is given, otherwise nothing
@@ -92,7 +93,9 @@ export const useBookings = ({user_id, room_id}: {user_id?: number, room_id?: num
     
     /**
      * Handles editing a booking and sends it to the database.
+     * @param editBookingID the ID of the booking to be edited
      * @param room_id the ID of the new room
+     * @param room_name the name of the new room
      * @param start_date the new date of the first booked day
      * @param end_date the new date of the last booked day
      */

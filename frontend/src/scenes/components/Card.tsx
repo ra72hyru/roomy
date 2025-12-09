@@ -12,7 +12,7 @@ interface CardProps {
     location?: string;
     onEdit: (id: number) => void;
     onDelete: (id: number) => void;
-    onShowBookings: (room_id: number) => void;
+    onShowBookings: (room_id: number, room_name: string) => void;
 }
 
 const Card = ({ id, roomName, status = 'Available', capacity, location, onEdit, onDelete, onShowBookings }: CardProps) => {
@@ -27,7 +27,7 @@ const Card = ({ id, roomName, status = 'Available', capacity, location, onEdit, 
             {/* <button id='edit-button' onClick={() => onEdit(id)}>Edit</button> */}
             {Boolean(user?.is_admin) && <RiDeleteBin6Line id='delete-card-button' size={24} onClick={() => onDelete(id)} />}
             {Boolean(user?.is_admin) && <MdOutlineModeEdit id='edit-card-button' size={24} onClick={() => {onEdit(id)}} />}
-            <button onClick={() => onShowBookings(id)}>Show Bookings</button>
+            <button onClick={() => onShowBookings(id, roomName)}>Show Bookings</button>
         </div>
     )
 };
