@@ -2,18 +2,27 @@
 .user {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     width: 100%;
 
-    border: solid 1px blue;
+    background-color: var(--background-color-lvl2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    padding: 16px;
 }
 
 .user-info {
     min-width: 256px;
-    height: 64px;
-    padding: 16px 32px;
+    /* height: 64px; */
+    /* padding: 16px 32px; */
 
-    border: solid 1px red;
+    background-color: var(--background-color-lvl2);
+}
+
+.user-buttons {
+    display: flex;
+    gap: 4px;
 }
 
 button {

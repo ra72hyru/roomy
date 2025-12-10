@@ -15,12 +15,14 @@ const User = ({ id, first_name, last_name, email, is_admin, onEdit, onDelete }: 
 
     return (
         <div className='user'>
-            <p className='user-info'>{first_name}</p>
-            <p className='user-info'>{last_name}</p>
+            <p className='user-info'>{first_name} {last_name}</p>
+           {/*  <p className='user-info'>{last_name}</p> */}
             <p className='user-info'>{email}</p>
             <p className='user-info'>{is_admin ? 'Admin' : 'User'}</p>
-            <button onClick={() => onEdit(id)}>Edit</button>
-            <button onClick={() => onDelete(id)}>Delete</button>
+            <div className='user-buttons'>
+                <button onClick={() => onEdit(id)}>Edit</button>
+                <button onClick={() => onDelete(id)}>Delete</button>
+            </div>
         </div>
     )
 };

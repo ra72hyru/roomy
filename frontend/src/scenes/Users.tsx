@@ -25,7 +25,17 @@ const Users = () => {
     return (
         <div className='users-container'>
             <div className='users-header'>
-
+                <h1><span className='header-content'>{users.length}</span> {users.length !== 1 ? 'Users' : 'User'}</h1>
+                <h1 id='header-add-user' onClick={() => setIsAddUserFormOpen(true)}>Add a user</h1>
+            </div>
+            <div className='users-table-header'>
+                <p className='users-table-descriptor'>Name</p>
+                <p className='users-table-descriptor'>Email</p>
+                <p className='users-table-descriptor'>Authorization</p>
+                <div className='padding'>
+                    <button className='padding-button'>Edit</button>
+                    <button className='padding-button'>Delete</button>
+                </div>
             </div>
             <div className='users-rows'>
                 {users.map((user, index) => (

@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
+import '../../styles/components/UserForm.css';
 
 interface UserFormProps {
     onCancel: (isAddUserFormOpen: boolean) => void;
@@ -13,15 +14,19 @@ const UserForm = ({ onSave, onCancel, currentData }: UserFormProps) => {
     const [is_admin, setIsAdmin] = useState<boolean>(currentData?.is_admin || false);
 
     return (
-        <div>
+        <div className='user-form-container'>
   
-                <input type="text" placeholder="First Name" onChange={e => setFirstName(e.target.value)} value={first_name} />
-                <input type="text" placeholder="Last Name" onChange={e => setLastName(e.target.value)} value={last_name} />
-                <input type="email" placeholder="Email" onChange={e => setEmail(e.target.value)} value={email} />
-                <input type='checkbox' name='adminCheckbox' onChange={e => setIsAdmin(e.target.checked)} checked={is_admin} />
-                <label htmlFor='adminCheckbox'>Admin</label>
-                <button onClick={() => onSave(first_name, last_name, email, is_admin)} type="submit">{currentData ? 'Save' : 'Add'}</button>
-                <button onClick={() => onCancel(false)}>Cancel</button>
+                <input className='user-form-input' type="text" placeholder="First Name" onChange={e => setFirstName(e.target.value)} value={first_name} />
+                <input className='user-form-input' type="text" placeholder="Last Name" onChange={e => setLastName(e.target.value)} value={last_name} />
+                <input className='user-form-input' type="email" placeholder="Email" onChange={e => setEmail(e.target.value)} value={email} />
+                <div className='user-form-checkbox-wrapper'>
+                    <input className='user-form-checkbox' type='checkbox' name='adminCheckbox' onChange={e => setIsAdmin(e.target.checked)} checked={is_admin} />
+                    <label htmlFor='adminCheckbox'>Admin</label>
+                </div>
+                <div className='user-form-buttons'>
+                    <button onClick={() => onSave(first_name, last_name, email, is_admin)} type="submit">{currentData ? 'Save' : 'Add'}</button>
+                    <button onClick={() => onCancel(false)}>Cancel</button>
+                </div>
 
         </div>
     )
