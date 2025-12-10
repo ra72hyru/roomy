@@ -1,7 +1,42 @@
-.sidebar {
+.sidebar-container {
     width: 256px;
     flex-shrink: 0;
     flex-grow: 0;
     flex-basis: 256px;
     min-width: 256px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    background-color: var(--background-color-lvl2);
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    /* gap: 16px; */
+
+    margin: 64px 0 64px 0px;
+    width: 100%;
+}
+
+.page-link {
+    font-size: 1.3rem;
+    font-weight: bold;
+    padding: 8px 0px 8px 64px;
+}
+
+.page-link:link, .page-link:visited {
+    text-decoration: none;
+    color: black;
+}
+
+.active-page {
+    background-color: black;
+    color: white !important;
+    border-radius: 0 32px 32px 0;
+    padding-right: 100px;
 }
