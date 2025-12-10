@@ -10,12 +10,13 @@
 	<ol>
     <li>cd backend</li>
   	<li>npm install</li>
+	<li>exmp.env in .env umbenennen</li>
   	<li>npm run dev</li>
   </ol>
 
 Beides mit Typescript (Ich habe vorher nur Javascript benutzt, also wenn manches Typescript-Spezifische nicht so best-practice sein sollte, könnte das ein Grund sein :D)
 
-Der Port fürs Backend ist in der .env Datei, ich weiß, dass man die eigentlich nicht hochlädt, aber nachdem hier eh nur der Port drinsteht, hab ich sie für's leichtere Setup mal dringelassen :)
+Der Port fürs Backend ist in der exmp.env Datei - <strong>muss noch umbenannt werden in .env</strong>
 
 <h2>Default Login: Username: admin - Password: password</h2>
 
