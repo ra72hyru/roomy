@@ -1,0 +1,23 @@
+.booking-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    border-radius: 4px;
+}
+
+.select-room {
+    padding: 8px;
+    font-size: 1rem;
+    background-color: var(--background-color-lvl3);
+    border: solid 1px var(--white-contrast);
+    border-radius: 4px;
+}
+
+.booking-form-buttons {
+    display: flex;
+    gap: 4px;
+}

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import '../../styles/components/BookingForm.css';
 
 interface BookingFormProps {
     rooms: {room_id: number, room_name: string}[];
@@ -27,22 +28,28 @@ const BookingForm = ({rooms, onCancel, onSave, onBook, currentData}: BookingForm
     };
 
     return (
-        <div>
-            <select value={selectedRoomId} onChange={e => setRoomData(e.target.value)} defaultValue={selectedRoomId}>
+        <div className='booking-form'>
+            <select className='select-room' value={selectedRoomId} onChange={e => setRoomData(e.target.value)} defaultValue={selectedRoomId}>
                 {rooms.map((room, index) => 
                     <option key={index} value={room.room_id}>{room.room_name}</option>
                 )}
             </select>
-            <label htmlFor='from-date'>From</label>
-            <input name='from-date' type='date' value={startDate} onChange={e => setStartDate(e.target.value)} />
-            <label htmlFor='to-date'>To</label>
-            <input name='to-date' type='date' value={endDate} onChange={e => setEndDate(e.target.value)} />
-            {onSave && 
-                (<button onClick={() => onSave(selectedRoomId, selectedRoomName, startDate, endDate)}>Save</button>)}
-                
-            {onBook && 
-                (<button onClick={() => onBook(selectedRoomId, startDate, endDate)}>Book room</button>)}
-            <button onClick={() => onCancel(false)}>Cancel</button>
+            <div>
+                <label htmlFor='from-date'>From </label>
+                <input name='from-date' type='date' value={startDate} onChange={e => setStartDate(e.target.value)} />
+            </div>
+            <div>
+                <label htmlFor='to-date'>To </label>
+                <input name='to-date' type='date' value={endDate} onChange={e => setEndDate(e.target.value)} />
+            </div>
+            <div className='booking-form-buttons'>
+                {onSave && 
+                    (<button onClick={() => onSave(selectedRoomId, selectedRoomName, startDate, endDate)}>Save</button>)}
+                    
+                {onBook && 
+                    (<button onClick={() => onBook(selectedRoomId, startDate, endDate)}>Book room</button>)}
+                <button onClick={() => onCancel(false)}>Cancel</button>
+            </div>
         </div>
     )
 };

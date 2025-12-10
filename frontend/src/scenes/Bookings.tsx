@@ -1,9 +1,8 @@
-import {useEffect, useState} from 'react';
+import { useState } from 'react';
 import '../styles/Bookings.css';
 import BookingForm from './components/BookingForm';
 import Booking from './components/Booking';
 import { useBookings } from '../../hooks/useBookings.ts';
-import BookingList from './components/BookingList.tsx';
 
 interface BookingsProps {
     user_id: number;
