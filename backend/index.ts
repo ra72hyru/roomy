@@ -210,6 +210,31 @@ app.get('/bookings/user/:user_id', (req, res) => {
     }
 });
 
+//get bookings for a specific date and room
+app.get('/bookings/room/:room_id/day/:day', (req, res) => {
+    const sql: string = req.params.day !== 'all' ? `
+        SELECT b.id AS booking_id, b.user_id, b.room_id, u.first_name, u.last_name, r.name AS room_name, b.start_time, b.end_time
+        FROM bookings b LEFT JOIN users u ON b.user_id = u.id LEFT JOIN rooms r ON b.room_id = r.id
+        WHERE room_id = ? AND start_time <= ? AND ? <= end_time
+        ORDER BY start_time ASC, end_time ASC;
+    ` :
+    `
+        SELECT b.id AS booking_id, b.user_id, b.room_id, u.first_name, u.last_name, r.name AS room_name, b.start_time, b.end_time
+        FROM bookings b LEFT JOIN users u ON b.user_id = u.id LEFT JOIN rooms r ON b.room_id = r.id
+        WHERE room_id = ?
+        ORDER BY start_time ASC, end_time ASC;
+    `;
+
+    try {
+        console.log('test:' ,req.params.day);
+        const bookings = req.params.day !== 'all' ? db.prepare(sql).all(req.params.room_id, req.params.day, req.params.day) : db.prepare(sql).all(req.params.room_id);
+        //console.log(bookings);
+        res.status(200).json({bookings: bookings});
+    } catch (err) {
+        res.status(500).json({message: (err as Error).message});
+    }
+});
+
 //get all bookings for a specific user
 /* app.get('/bookings/user/:user_id', (req, res) => {
     const sql: string = `

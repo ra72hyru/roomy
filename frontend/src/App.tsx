@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import LoginPage from './scenes/LoginPage';
-import Dashboard from './scenes/Dashboard';
+/* import Dashboard from './scenes/Dashboard'; */
 import Rooms from './scenes/Rooms';
 import Sidebar from './scenes/components/Sidebar';
 import Users from './scenes/Users';
@@ -17,11 +17,11 @@ function App() {
             {user && <Sidebar />}
             <Routes>
               <Route path='/login' element={<LoginPage /* onLogin={handleLogin} */ />} />
-              <Route path='/dashboard' element={user ? <Dashboard /> : <Navigate to='/login' />} />
+              {/* <Route path='/dashboard' element={user ? <Dashboard /> : <Navigate to='/login' />} /> */}
               <Route path='/rooms' element={user ? <Rooms /> : <Navigate to='/login' />} />
               <Route path='/users' element={user?.is_admin ? <Users /> : <Navigate to='/login' />} />
               <Route path='/bookings' element={user ? <Bookings user_id={user.user_id} /> : <Navigate to='/login' />} />
-              <Route path='/' element={<Navigate to={user ? '/dashboard' : '/login'} />} />
+              <Route path='/' element={<Navigate to={user ? '/rooms' : '/login'} />} />
             </Routes>
           </div>
         </BrowserRouter>

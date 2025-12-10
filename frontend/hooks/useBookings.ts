@@ -13,14 +13,14 @@ interface BookingType {
     end_time: string;
 }
 
-export const useBookings = ({user_id, room_id}: {user_id?: number, room_id?: number}) => {
+export const useBookings = ({user_id, room_id, day}: {user_id?: number, room_id?: number, day?: string}) => {
     const [bookings, setBookings] = useState<BookingType[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [rooms, setRooms] = useState<{room_id: number, room_name: string}[]>([]);
 
     //Get all bookings for the current user
     useEffect(() => {
-        if (user_id && user_id < 0 || room_id && room_id < 0) return;
+        if (user_id !== undefined && user_id < 0 || room_id !== undefined && room_id < 0) return;
         (async (): Promise<void> => {
             try {
                 //if user_id is given as parameter use that, otherwise the room_id if it is given, otherwise nothing
@@ -62,6 +62,29 @@ export const useBookings = ({user_id, room_id}: {user_id?: number, room_id?: num
             }
         })();
     }, []);
+
+    useEffect(() => {
+        console.log('Day changed to: ', day);
+        if (room_id === undefined || room_id < 0) return;
+        (async (): Promise<void> => {
+            try {
+                const specified_url: string = day !== '' ? `${url}/bookings/room/${room_id}/day/${day}` : `${url}/bookings/room/${room_id}/day/all`;
+                const response = await fetch(specified_url);
+                const retData = await response.json();
+ 
+                if (!response.ok)
+                    throw new Error(retData.message);
+                else {
+                    setBookings(retData.bookings);
+                    console.log(bookings);
+                }
+            } catch (err) {
+                console.log((err as Error).message);
+            } finally {
+                setIsLoading(false);
+            }
+        })();
+    }, [day]);
 
     /**
      * Handles adding a new booking and sends it to the database.

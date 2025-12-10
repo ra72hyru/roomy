@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { use, useState } from 'react';
 import Card from './components/Card';
 import RoomForm from './components/RoomForm';
 import AddRoomButton from './components/AddRoomButton';
@@ -18,6 +18,7 @@ const Rooms = () => {
     const [currentRoom, setCurrentRoom] = useState<string>('');
     const [currentRoomId, setCurrentRoomId] = useState<number | null>(null);
     const [editBooking, setEditBooking] = useState<number | null>(null);
+    const [day, setDay] = useState<string>('');
 
     const {user} = useAuthContext();
 
@@ -35,7 +36,7 @@ const Rooms = () => {
     };
 
     //handle the bookings for a room using the hook
-    const {bookings, handleEditBooking, handleDeleteBooking} = useBookings({room_id: currentRoomId ?? -1});
+    const {bookings, handleEditBooking, handleDeleteBooking} = useBookings({room_id: currentRoomId ?? -1, day: day});
 
     const handleEditBookingWrapper = async (room_id: number, room_name: string, start_time: string, end_time: string) => {
         await handleEditBooking(editBooking ?? -1, room_id, room_name, start_time, end_time);
@@ -51,6 +52,10 @@ const Rooms = () => {
     return (
         <div className='rooms-container'>
             <div className='rooms-header'>
+                {showRoomBookings && <div>
+                    <input type='date' value={day} onChange={e => setDay((e.target as HTMLInputElement).value)} />
+                    <button onClick={() => setDay('')}>Clear</button>
+                </div>}
                 {showRoomBookings ? 
                     (<h3>Bookings for room: {currentRoom}</h3>) 
                 :
