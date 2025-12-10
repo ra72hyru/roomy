@@ -61,7 +61,7 @@ const Rooms = () => {
                 }
             </div>
             {showRoomBookings ? 
-                <div>
+                <div className='room-bookings'>
                     {bookings.length !== 0 ? 
                             (bookings.map((booking, index) => (booking.room_id === currentRoomId && (
                                 editBooking !== booking.booking_id ? 
@@ -77,7 +77,7 @@ const Rooms = () => {
                                 <h1>This room has no bookings</h1>
                             </div>)
                     }
-                    <button onClick={() => setShowRoomBookings(false)}>Go back</button>
+                    <button id='go-back-button' onClick={() => setShowRoomBookings(false)}>Go back</button>
                 </div> 
             :
                 <div className='rooms-cards'>

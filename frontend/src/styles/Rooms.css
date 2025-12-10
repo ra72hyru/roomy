@@ -38,6 +38,24 @@
     background-color: var(--background-color);
 }
 
+.room-bookings {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+
+    margin: 48px;
+    padding: 16px;
+    background-color: var(--background-color-lvl2);
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+#go-back-button {
+    width: 128px;
+    margin-top: 16px;
+}
+
 .header-content {
     font-size: 3.5rem;
 }
