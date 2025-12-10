@@ -3,6 +3,7 @@ import '../styles/Bookings.css';
 import BookingForm from './components/BookingForm';
 import Booking from './components/Booking';
 import { useBookings } from '../../hooks/useBookings.ts';
+import BookingList from './components/BookingList.tsx';
 
 interface BookingsProps {
     user_id: number;
@@ -32,6 +33,8 @@ const Bookings = ({user_id}: BookingsProps) => {
             </div>
             <div className='bookings-rows-container'>
 
+                {/* <BookingList bookings={bookings} rooms={rooms} editBooking={editBooking} onCancel={() => setEditBooking(null)} 
+                            onDelete={handleDeleteBooking} onEdit={setEditBooking} onSave={handleEditBookingWrapper} /> */}
                 {!isLoading ? <div className='bookings-rows'>
                     {!isAddBookingFormOpen && <button onClick={() => setIsAddBookingFormOpen(true)}>Book a room</button>}
                     {isAddBookingFormOpen && <BookingForm rooms={rooms} onBook={handleAddBookingWrapper} onCancel={setIsAddBookingFormOpen}/>}

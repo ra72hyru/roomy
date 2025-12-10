@@ -65,7 +65,7 @@ const Rooms = () => {
                     {bookings.length !== 0 ? 
                             (bookings.map((booking, index) => (booking.room_id === currentRoomId && (
                                 editBooking !== booking.booking_id ? 
-                                        <Booking key={index} id={booking.booking_id} room_name={booking.room_name} start_date={booking.start_time} end_date={booking.end_time}
+                                        <Booking key={index} id={booking.booking_id} user_id={booking.user_id} room_name={booking.room_name} start_date={booking.start_time} end_date={booking.end_time}
                                             first_name={booking.first_name} last_name={booking.last_name} onDelete={handleDeleteBooking} onEdit={setEditBooking} />
                                     :
                                         <BookingForm key={index} rooms={rooms.map(r => ({room_id: r.id, room_name: r.name}))} 
