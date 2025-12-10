@@ -27,6 +27,7 @@
     font-size: 1.3rem;
     font-weight: bold;
     padding: 8px 0px 8px 64px;
+    width: 90%;
 }
 
 .page-link:link, .page-link:visited {
@@ -38,5 +39,6 @@
     background-color: black;
     color: white !important;
     border-radius: 0 32px 32px 0;
-    padding-right: 100px;
+    /* padding-right: 100px; */
+    transition: background-color 0.2s;
 }
