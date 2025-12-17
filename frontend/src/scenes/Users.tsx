@@ -11,6 +11,7 @@ const Users = () => {
     const [editUser, setEditUser] = useState<number | null>(null);
 
     const addFormRef = useRef<HTMLDivElement>(null);
+    const editFormRef = useRef<HTMLDivElement>(null);
 
     const {users, handleAddUser, handleEditUser, handleDeleteUser} = useUsers();
 
@@ -28,6 +29,11 @@ const Users = () => {
         if (isAddUserFormOpen)
             addFormRef.current?.scrollIntoView({behavior: 'smooth'/* , block: 'start' */});
     }, [isAddUserFormOpen]);
+
+    useEffect(() => {
+        if (editUser != null)
+            editFormRef.current?.scrollIntoView({behavior: 'smooth'});
+    }, [editUser]);
 
     return (
         <div className='users-container'>
@@ -54,8 +60,9 @@ const Users = () => {
                             <User key={index} id={user.id} first_name={user.first_name} last_name={user.last_name} 
                                     email={user.email} is_admin={user.is_admin} onEdit={setEditUser} onDelete={handleDeleteUser} />
                                 :
+                                <div className='edit-form-wrapper' ref={editFormRef}>
                             <UserForm key={index} onSave={handleEditUserWrapper} onCancel={() => setEditUser(null)} 
-                                        currentData={{first_name: user.first_name, last_name: user.last_name, email: user.email, is_admin: user.is_admin}}/> 
+                                        currentData={{first_name: user.first_name, last_name: user.last_name, email: user.email, is_admin: user.is_admin}}/> </div>
                     ))}
                     {!isAddUserFormOpen && <button onClick={() => setIsAddUserFormOpen(true)}>Add User</button>}
                 </div>
