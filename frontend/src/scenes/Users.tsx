@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../styles/Users.css';
 import User from './components/User';
 import UserForm from './components/UserForm';
@@ -9,7 +9,9 @@ const Users = () => {
     //const [users, setUsers] = useState<{id: number, first_name: string, last_name: string, email?: string, is_admin: boolean}[]>([]);
     const [isAddUserFormOpen, setIsAddUserFormOpen] = useState(false);
     const [editUser, setEditUser] = useState<number | null>(null);
-    
+
+    const addFormRef = useRef<HTMLDivElement>(null);
+
     const {users, handleAddUser, handleEditUser, handleDeleteUser} = useUsers();
 
     const handleAddUserWrapper = async (first_name: string, last_name: string, email: string, is_admin: boolean) => {
@@ -21,6 +23,11 @@ const Users = () => {
         await handleEditUser(editUser ?? -1, first_name, last_name, email, is_admin);
         setEditUser(null);
     };
+
+    useEffect(() => {
+        if (isAddUserFormOpen)
+            addFormRef.current?.scrollIntoView({behavior: 'smooth'/* , block: 'start' */});
+    }, [isAddUserFormOpen]);
 
     return (
         <div className='users-container'>
@@ -37,17 +44,21 @@ const Users = () => {
                     <button className='padding-button'>Delete</button>
                 </div>
             </div>
-            <div className='users-rows'>
-                {users.map((user, index) => (
-                    editUser !== user.id ?
-                        <User key={index} id={user.id} first_name={user.first_name} last_name={user.last_name} 
-                                email={user.email} is_admin={user.is_admin} onEdit={setEditUser} onDelete={handleDeleteUser} />
-                            :
-                        <UserForm key={index} onSave={handleEditUserWrapper} onCancel={() => setEditUser(null)} 
-                                    currentData={{first_name: user.first_name, last_name: user.last_name, email: user.email, is_admin: user.is_admin}}/> 
-                ))}
-                {!isAddUserFormOpen && <button onClick={() => setIsAddUserFormOpen(true)}>Add User</button>}
-                {isAddUserFormOpen && (<UserForm onSave={handleAddUserWrapper} onCancel={setIsAddUserFormOpen} />)}
+            <div className='users-rows-wrapper'>
+                <div className='users-rows'>
+                    {isAddUserFormOpen && <div className='add-form-wrapper' ref={addFormRef}>
+                                              <UserForm onSave={handleAddUserWrapper} onCancel={setIsAddUserFormOpen} />
+                                          </div>}
+                    {users.map((user, index) => (
+                        editUser !== user.id ?
+                            <User key={index} id={user.id} first_name={user.first_name} last_name={user.last_name} 
+                                    email={user.email} is_admin={user.is_admin} onEdit={setEditUser} onDelete={handleDeleteUser} />
+                                :
+                            <UserForm key={index} onSave={handleEditUserWrapper} onCancel={() => setEditUser(null)} 
+                                        currentData={{first_name: user.first_name, last_name: user.last_name, email: user.email, is_admin: user.is_admin}}/> 
+                    ))}
+                    {!isAddUserFormOpen && <button onClick={() => setIsAddUserFormOpen(true)}>Add User</button>}
+                </div>
             </div>
         </div>
     )
