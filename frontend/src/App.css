@@ -2,4 +2,13 @@
     background-color: var(--background-color);
     height: 100%;
     display: flex;
+    overflow: hidden;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
+    min-height: 0;
 }

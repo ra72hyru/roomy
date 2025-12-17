@@ -29,18 +29,22 @@ const BookingForm = ({rooms, onCancel, onSave, onBook, currentData}: BookingForm
 
     return (
         <div className='booking-form'>
-            <select className='select-room' value={selectedRoomId} onChange={e => setRoomData(e.target.value)} defaultValue={selectedRoomId}>
-                {rooms.map((room, index) => 
-                    <option key={index} value={room.room_id}>{room.room_name}</option>
-                )}
-            </select>
-            <div>
-                <label htmlFor='from-date'>From </label>
-                <input name='from-date' type='date' value={startDate} onChange={e => setStartDate(e.target.value)} />
+            <div className='booking-form-input-wrapper'>
+                <select className='select-room' value={selectedRoomId} onChange={e => setRoomData(e.target.value)} defaultValue={selectedRoomId}>
+                    {rooms.map((room, index) => 
+                        <option key={index} value={room.room_id}>{room.room_name}</option>
+                    )}
+                </select>
             </div>
-            <div>
-                <label htmlFor='to-date'>To </label>
-                <input name='to-date' type='date' value={endDate} onChange={e => setEndDate(e.target.value)} />
+            <div className='booking-form-input-wrapper'>
+                <label htmlFor='from-date'>
+                    <input name='from-date' type='date' value={startDate} onChange={e => setStartDate(e.target.value)} />
+                </label>
+            </div>
+            <div className='booking-form-input-wrapper'>
+                <label htmlFor='to-date'>
+                    <input name='to-date' type='date' value={endDate} onChange={e => setEndDate(e.target.value)} />
+                </label>
             </div>
             <div className='booking-form-buttons'>
                 {onSave && 

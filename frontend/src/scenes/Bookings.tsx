@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import '../styles/Bookings.css';
 import BookingForm from './components/BookingForm';
-import Booking from './components/Booking';
+import BookingList from './components/BookingList.tsx';
 import { useBookings } from '../../hooks/useBookings.ts';
 
 interface BookingsProps {
@@ -30,23 +30,14 @@ const Bookings = ({user_id}: BookingsProps) => {
                 <h1><span className='header-content'>{bookings.length}</span> {bookings.length !== 1 ? 'Bookings' : 'Booking'}</h1>
                 <h1 id='header-add-booking' onClick={() => setIsAddBookingFormOpen(true)}>Book a room</h1>
             </div>
-            <div className='bookings-rows-container'>
-
-                {/* <BookingList bookings={bookings} rooms={rooms} editBooking={editBooking} onCancel={() => setEditBooking(null)} 
-                            onDelete={handleDeleteBooking} onEdit={setEditBooking} onSave={handleEditBookingWrapper} /> */}
-                {!isLoading ? <div className='bookings-rows'>
-                    {!isAddBookingFormOpen && <button onClick={() => setIsAddBookingFormOpen(true)}>Book a room</button>}
-                    {isAddBookingFormOpen && <BookingForm rooms={rooms} onBook={handleAddBookingWrapper} onCancel={setIsAddBookingFormOpen}/>}
-                    {bookings.map((booking, index) => (
-                        editBooking !== booking.booking_id ?
-                            <Booking key={index} id={booking.booking_id} room_name={booking.room_name} user_id={booking.user_id}
-                                start_date={booking.start_time} end_date={booking.end_time} onEdit={setEditBooking} onDelete={handleDeleteBooking} /> 
-                        :
-                            <BookingForm key={index} rooms={rooms} onSave={handleEditBookingWrapper} onCancel={() => setEditBooking(null)} 
-                                currentData={{room_id: booking.room_id, room_name: booking.room_name, start_date: booking.start_time, end_date: booking.end_time}} />
-                    ))}
-                </div> : <h1>Loading bookings</h1>}
-            </div>
+            {isAddBookingFormOpen && 
+                <div className={`bookings-add-form ${isAddBookingFormOpen ? 'visible' : ''}`}>
+                    <BookingForm rooms={rooms} onCancel={() => setIsAddBookingFormOpen(false)} onBook={handleAddBookingWrapper} />
+                </div>}
+                <div className={`bookings-list-wrapper ${isAddBookingFormOpen ? 'shifted' : ''}`} >
+            {!isLoading && <BookingList bookings={bookings} rooms={rooms} editBooking={editBooking} onCancel={() => setEditBooking(null)} 
+                                        onDelete={handleDeleteBooking} onEdit={setEditBooking} onSave={handleEditBookingWrapper} />}
+                </div>
         </div>
     )
 };

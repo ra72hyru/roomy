@@ -15,14 +15,16 @@ function App() {
         <BrowserRouter>
           <div className="app">
             {user && <Sidebar />}
-            <Routes>
-              <Route path='/login' element={<LoginPage /* onLogin={handleLogin} */ />} />
-              {/* <Route path='/dashboard' element={user ? <Dashboard /> : <Navigate to='/login' />} /> */}
-              <Route path='/rooms' element={user ? <Rooms /> : <Navigate to='/login' />} />
-              <Route path='/users' element={user?.is_admin ? <Users /> : <Navigate to='/login' />} />
-              <Route path='/bookings' element={user ? <Bookings user_id={user.user_id} /> : <Navigate to='/login' />} />
-              <Route path='/' element={<Navigate to={user ? '/rooms' : '/login'} />} />
-            </Routes>
+            <main className='main'>
+              <Routes>
+                <Route path='/login' element={<LoginPage /* onLogin={handleLogin} */ />} />
+                {/* <Route path='/dashboard' element={user ? <Dashboard /> : <Navigate to='/login' />} /> */}
+                <Route path='/rooms' element={user ? <Rooms /> : <Navigate to='/login' />} />
+                <Route path='/users' element={user?.is_admin ? <Users /> : <Navigate to='/login' />} />
+                <Route path='/bookings' element={user ? <Bookings user_id={user.user_id} /> : <Navigate to='/login' />} />
+                <Route path='/' element={<Navigate to={user ? '/rooms' : '/login'} />} />
+              </Routes>
+            </main>
           </div>
         </BrowserRouter>
     )

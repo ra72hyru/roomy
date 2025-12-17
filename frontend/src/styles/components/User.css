@@ -5,18 +5,19 @@
     align-items: center;
 
     width: 100%;
+    height: 64px;
 
     background-color: var(--background-color-lvl2);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
-    padding: 16px;
+    padding: 16px 32px;
 }
 
 .user-info {
     min-width: 256px;
     /* height: 64px; */
     /* padding: 16px 32px; */
-
+    font-size: 1.3rem;
     background-color: var(--background-color-lvl2);
 }
 

@@ -10,6 +10,7 @@
   --foreground-color-lvl3: hsl(0, 0%, 10%);
   --text: hsl(0, 0%, 0%);
   --text-contrast: hsl(0, 0%, 100%);
+  --table-header: #d0d1d2;
 }
 
 * {

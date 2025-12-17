@@ -2,7 +2,8 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-
+    min-height: 0;
+    
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     border-left: solid 1px var(--white-contrast);
 }
@@ -44,8 +45,8 @@
     justify-content: space-between;
     align-items: center;
     margin: 64px 64px 8px 64px;
-    padding: 0 16px 0 16px;
-    background-color: var(--white-contrast);
+    padding: 0 32px;
+    background-color: var(--table-header);
     border-radius: 4px;
 }
 
