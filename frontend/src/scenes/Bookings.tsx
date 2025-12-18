@@ -30,13 +30,12 @@ const Bookings = ({user_id}: BookingsProps) => {
                 <h1><span className='header-content'>{bookings.length}</span> {bookings.length !== 1 ? 'Bookings' : 'Booking'}</h1>
                 <h1 id='header-add-booking' onClick={() => setIsAddBookingFormOpen(true)}>Book a room</h1>
             </div>
-            {isAddBookingFormOpen && 
                 <div className={`bookings-add-form ${isAddBookingFormOpen ? 'visible' : ''}`}>
-                    <BookingForm rooms={rooms} onCancel={() => setIsAddBookingFormOpen(false)} onBook={handleAddBookingWrapper} />
-                </div>}
+                    {isAddBookingFormOpen && <BookingForm rooms={rooms} onCancel={() => setIsAddBookingFormOpen(false)} onBook={handleAddBookingWrapper} />}
+                </div>
                 <div className={`bookings-list-wrapper ${isAddBookingFormOpen ? 'shifted' : ''}`} >
-            {!isLoading && <BookingList bookings={bookings} rooms={rooms} editBooking={editBooking} onCancel={() => setEditBooking(null)} 
-                                        onDelete={handleDeleteBooking} onEdit={setEditBooking} onSave={handleEditBookingWrapper} />}
+                    {!isLoading && <BookingList bookings={bookings} rooms={rooms} editBooking={editBooking} onCancel={() => setEditBooking(null)} 
+                                                onDelete={handleDeleteBooking} onEdit={setEditBooking} onSave={handleEditBookingWrapper} />}
                 </div>
         </div>
     )

@@ -27,7 +27,9 @@
 }
 
 .bookings-add-form {
-    margin: 16px 64px 0px 64px;
+    /* margin: 16px 64px 0px 64px; */
+    height: 128px;
+    margin: 8px 64px 0 64px;
 }
 
 .bookings-list-wrapper {
@@ -35,10 +37,10 @@
     flex-grow: 1;
     min-height: 0;
 
-    margin-top: 64px;
+    /* margin-top: 64px; */
     transition: margin 250ms ease;
 }
 
 .bookings-list-wrapper.shifted {
-    margin-top: 128px;
+    margin-top: 64px;
 }
