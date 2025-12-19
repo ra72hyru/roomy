@@ -1,6 +1,7 @@
 import Booking from "./Booking";
 import BookingForm from "./BookingForm";
 import '../../styles/components/BookingList.css';
+import { useEffect, useRef } from "react";
 
 interface BookingListProps {
     bookings: {
@@ -26,6 +27,13 @@ interface BookingListProps {
 }
 
 const BookingList = ({bookings, rooms, editBooking, onCancel, onEdit, onDelete, onSave, showName}: BookingListProps) => {
+    const editRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (editBooking != null)
+            editRef.current?.scrollIntoView({behavior: 'smooth'});
+    }, [editBooking]);
+    
     return (
         <div className="booking-table">
             <div className="booking-table-header">

@@ -2,7 +2,8 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-
+    min-height: 0;
+    
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     border-left: solid 1px var(--white-contrast);
 }
@@ -49,6 +50,20 @@
     background-color: var(--background-color-lvl2);
     border-radius: 4px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.room-bookings-wrapper {
+    margin-top: 90px;
+    min-height: 0;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+}
+
+.room-bookings-header-interactions {
+    display: flex;
+    width: 50%;
+    justify-content: space-between;
 }
 
 #go-back-button {

@@ -1,4 +1,4 @@
-import { use, useState } from 'react';
+import { useState } from 'react';
 import Card from './components/Card';
 import RoomForm from './components/RoomForm';
 import AddRoomButton from './components/AddRoomButton';
@@ -8,6 +8,7 @@ import Booking from './components/Booking';
 import { useBookings } from '../../hooks/useBookings.ts';
 import { useRooms } from '../../hooks/useRooms.ts';
 import BookingForm from './components/BookingForm.tsx';
+import BookingList from './components/BookingList.tsx';
 
 const Rooms = () => {
     const [isRoomFormOpen, setIsRoomFormOpen] = useState<boolean>(false);
@@ -52,10 +53,15 @@ const Rooms = () => {
     return (
         <div className='rooms-container'>
             <div className='rooms-header'>
-                {showRoomBookings && <div>
-                    <input type='date' value={day} onChange={e => setDay((e.target as HTMLInputElement).value)} />
-                    <button onClick={() => setDay('')}>Clear</button>
-                </div>}
+                {showRoomBookings && 
+                    <div className='room-bookings-header-interactions'>
+                        <button className='back-button' onClick={() => setShowRoomBookings(false)}>Go back</button>
+                        <div>
+                            <input type='date' value={day} onChange={e => setDay((e.target as HTMLInputElement).value)} />
+                            <button onClick={() => setDay('')}>Clear</button>
+                        </div>
+                    </div>
+                }
                 {showRoomBookings ? 
                     (<h3>Bookings for room: {currentRoom}</h3>) 
                 :
@@ -66,24 +72,10 @@ const Rooms = () => {
                 }
             </div>
             {showRoomBookings ? 
-                <div className='room-bookings'>
-                    {bookings.length !== 0 ? 
-                            (bookings.map((booking, index) => (booking.room_id === currentRoomId && (
-                                editBooking !== booking.booking_id ? 
-                                        <Booking key={index} id={booking.booking_id} user_id={booking.user_id} room_name={booking.room_name} start_date={booking.start_time} end_date={booking.end_time}
-                                            first_name={booking.first_name} last_name={booking.last_name} onDelete={handleDeleteBooking} onEdit={setEditBooking} />
-                                    :
-                                        <BookingForm key={index} rooms={rooms.map(r => ({room_id: r.id, room_name: r.name}))} 
-                                            onSave={handleEditBookingWrapper} onCancel={() => setEditBooking(null)}
-                                            currentData={{room_id: booking.room_id, room_name: booking.room_name, start_date: booking.start_time, end_date: booking.end_time}} />
-                            ))) )
-                        : 
-                            (<div>
-                                <h1>This room has no bookings</h1>
-                            </div>)
-                    }
-                    <button id='go-back-button' onClick={() => setShowRoomBookings(false)}>Go back</button>
-                </div> 
+                <div className='room-bookings-wrapper'>
+                    <BookingList bookings={bookings} rooms={rooms.map(r => ({room_id: r.id, room_name: r.name}))} editBooking={editBooking} onCancel={() => setEditBooking(null)}
+                        onDelete={handleDeleteBooking} onEdit={setEditBooking} onSave={handleEditBookingWrapper} />
+                </div>
             :
                 <div className='rooms-cards'>
                     {rooms.map((room, index) => (
