@@ -26,13 +26,13 @@ const Rooms = () => {
     //handle the rooms using the hook
     const {rooms, handleAddRoom, handleEditRoom, handleDeleteRoom} = useRooms();
 
-    const handleAddRoomWrapper = async (room_name: string, capacity: number, location?: string) => {
-        await handleAddRoom(room_name, capacity, location);
+    const handleAddRoomWrapper = async (room_name: string, capacity: number | '', location?: string) => {
+        await handleAddRoom(room_name, typeof(capacity) === 'string' ? 0 : capacity, location); 
         setIsRoomFormOpen(false);
     };
 
-    const handleEditRoomWrapper = async (room_name: string, capacity: number, location?: string) => {
-        await handleEditRoom(editRoom ?? -1, room_name, capacity, location);
+    const handleEditRoomWrapper = async (room_name: string, capacity: number | '', location?: string) => {
+        await handleEditRoom(editRoom ?? -1, room_name, typeof(capacity) === 'string' ? 0 : capacity, location);
         setEditRoom(null);
     };
 
